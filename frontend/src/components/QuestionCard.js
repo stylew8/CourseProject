@@ -1,12 +1,11 @@
 import React from 'react';
 import { Card, Row, Col, Form, Button, InputGroup } from 'react-bootstrap';
-import { GripHorizontal, GripVertical } from 'react-bootstrap-icons';
+import { GripVertical } from 'react-bootstrap-icons';
 import OptionItem from './OptionItem';
 
-const QuestionCard = ({ question, index, handleQuestionChange, handleOptionChange, updateOptions, addOptionToQuestion, removeQuestion }) => {
+const QuestionCard = ({ question, index, dragHandleRef, handleQuestionChange, handleOptionChange, updateOptions, addOptionToQuestion, removeQuestion }) => {
     const questionTypes = ["single-line", "multi-line", "dropdown", "checkbox"];
 
-    // Функция для переупорядочивания опций
     const reorderOption = (dragIndex, hoverIndex) => {
         const updatedOptions = Array.from(question.options);
         const [movedOption] = updatedOptions.splice(dragIndex, 1);
@@ -24,14 +23,17 @@ const QuestionCard = ({ question, index, handleQuestionChange, handleOptionChang
 
     return (
         <Card className="mb-3">
-            <Col className="text-center" style={{ cursor: 'grab' }}>
-                <GripHorizontal style={{ fontSize: '30px' }} />
-            </Col>
+            <Row className="align-items-center">
+                <Col xs="auto" ref={dragHandleRef} className="text-center" style={{ cursor: 'grab' }}>
+                    <GripVertical style={{ fontSize: '30px' }} />
+                </Col>
+                <Col className="text-end">
+                    <Button size="sm" className="mb-3" variant="outline-danger" onClick={() => removeQuestion(index)}>
+                        X
+                    </Button>
+                </Col>
+            </Row>
             <Card.Body>
-                <Button size="sm" className='mb-3' variant="outline-danger" onClick={() => removeQuestion(index)}>
-                    Remove Question
-                </Button>
-
                 <Row className="align-items-center mb-3">
                     <Col md={7}>
                         <Form.Control
@@ -114,7 +116,6 @@ const QuestionCard = ({ question, index, handleQuestionChange, handleOptionChang
                         )}
                     </div>
                 )}
-
             </Card.Body>
         </Card>
     );

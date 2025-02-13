@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import { Container, Navbar, Nav } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -15,23 +15,38 @@ import CreateTemplatePage from './pages/CreateTemplatePage';
 // Components
 import ProtectedRoute from './components/ProtectedRoute';
 import ThemeSwitcher from './components/ThemeSwitcher';
-// import TemplateCard from './components/TemplateCard';
-// import TagCloud from './components/TagCloud';
-// import FormList from './components/FormList';
+import EditFormPage from './pages/EditFormPage';
+import EditTemplatePage from './pages/EditTemplatePage';
 
 function App() {
     return (
         <Router>
             <Navbar bg="dark" variant="dark" expand="lg" className="shadow">
                 <Container>
-                    <Navbar.Brand href="/" className="fw-bold">Custom Forms</Navbar.Brand>
+                    <Navbar.Brand as={Link} to="/" className="fw-bold">
+                        Custom Forms
+                    </Navbar.Brand>
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
                     <Navbar.Collapse id="basic-navbar-nav">
                         <Nav className="me-auto">
-                            <Nav.Link href="/" className="text-light">Home</Nav.Link>
-                            <Nav.Link href="/dashboard" className="text-light">Dashboard</Nav.Link>
-                            <Nav.Link href="/admin" className="text-light">Admin</Nav.Link>
-                            <Nav.Link href="/create-template" className="text-light">Create Template</Nav.Link>
+                            <Nav.Link as={Link} to="/" className="text-light">
+                                Home
+                            </Nav.Link>
+                            <Nav.Link as={Link} to="/dashboard" className="text-light">
+                                Dashboard
+                            </Nav.Link>
+                            <Nav.Link as={Link} to="/admin" className="text-light">
+                                Admin
+                            </Nav.Link>
+                            <Nav.Link as={Link} to="/create-template" className="text-light">
+                                Create Template
+                            </Nav.Link>
+                            <Nav.Link as={Link} to="/edit-page/1" className="text-light">
+                                Edit Form
+                            </Nav.Link>
+                            <Nav.Link as={Link} to="/edit-template/1" className="text-light">
+                                Edit Template
+                            </Nav.Link>
                         </Nav>
                     </Navbar.Collapse>
                     <ThemeSwitcher />
@@ -47,6 +62,8 @@ function App() {
                     <Route path="/template/:id" element={<ProtectedRoute component={TemplatePage} />} />
                     <Route path="/admin" element={<ProtectedRoute component={AdminPage} adminOnly={true} />} />
                     <Route path="/create-template" element={<ProtectedRoute component={CreateTemplatePage} />} />
+                    <Route path="/edit-page/:formId" element={<ProtectedRoute component={EditFormPage} />} />
+                    <Route path="/edit-template/:templateId" element={<ProtectedRoute component={EditTemplatePage} />} />
                 </Routes>
             </Container>
         </Router>

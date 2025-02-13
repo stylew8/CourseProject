@@ -48,6 +48,13 @@ const CreateTemplatePage = () => {
         setQuestions(updatedQuestions);
     };
 
+    const moveQuestion = (dragIndex, hoverIndex) => {
+        const updatedQuestions = Array.from(questions);
+        const [movedQuestion] = updatedQuestions.splice(dragIndex, 1);
+        updatedQuestions.splice(hoverIndex, 0, movedQuestion);
+        setQuestions(updatedQuestions);
+    };
+
     const handleSubmit = (e) => {
         e.preventDefault();
         console.log('Form Data:', { title, description, questions });
@@ -91,11 +98,12 @@ const CreateTemplatePage = () => {
                                 updateOptions={updateOptions}
                                 addOptionToQuestion={addOptionToQuestion}
                                 removeQuestion={removeQuestion}
+                                moveQuestion={moveQuestion}
                             />
                         ))}
                     </DndProvider>
 
-                    <div className='d-flex justify-content-beetween gap-3'>
+                    <div className="d-flex justify-content-between gap-3 text-center">
                         <Button variant="outline-primary" onClick={addQuestion} className="mb-3">
                             Add Question
                         </Button>
