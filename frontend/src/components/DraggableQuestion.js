@@ -2,7 +2,16 @@ import React, { useRef } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
 import QuestionCard from './QuestionCard';
 
-const DraggableQuestion = ({ question, index, moveQuestion, ...props }) => {
+const DraggableQuestion = ({ 
+    question, 
+    index, 
+    moveQuestion, 
+    handleQuestionChange, 
+    removeQuestion, 
+    updateOptions, 
+    addOptionToQuestion, 
+    handleOptionChange 
+}) => {
     const ref = useRef(null);
     const dragHandleRef = useRef(null);
 
@@ -35,7 +44,11 @@ const DraggableQuestion = ({ question, index, moveQuestion, ...props }) => {
                 question={question}
                 index={index}
                 dragHandleRef={dragHandleRef}
-                {...props}
+                handleQuestionChange={handleQuestionChange}
+                removeQuestion={removeQuestion}
+                updateOptions={updateOptions}
+                addOptionToQuestion={addOptionToQuestion}
+                handleOptionChange={handleOptionChange}
             />
         </div>
     );

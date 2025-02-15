@@ -1,21 +1,27 @@
-import React, { useState } from 'react';
+// src/pages/RegisterPage.js
+import React, { useState, useContext } from 'react';
 import { Form, Button, Alert } from 'react-bootstrap';
-import { useDispatch, useSelector } from 'react-redux';
-import { registerUser } from '../redux/authSlice';
+import { AuthContext } from '../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 const RegisterPage = () => {
-    const dispatch = useDispatch();
+    const { register, loading, error } = useContext(AuthContext);
     const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
+    const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
+    const navigate = useNavigate();
 
-    const { loading, error } = useSelector((state) => state.auth);
-
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        dispatch(registerUser({ email, firstName, lastName, password, confirmPassword }));
+        try {
+            await register(email, firstName, lastName, password, confirmPassword);
+            // После успешной регистрации перенаправляем на страницу логина
+            navigate('/login');
+        } catch (err) {
+            // Ошибка уже установлена в контексте
+        }
     };
 
     return (
@@ -28,6 +34,7 @@ const RegisterPage = () => {
                             ? (error.detail || error.title || JSON.stringify(error))
                             : error
                         )
+                            .toString()
                             .split('\n')
                             .map((line, idx) => (
                                 <li key={idx}>{line}</li>
@@ -35,22 +42,21 @@ const RegisterPage = () => {
                     </ul>
                 </Alert>
             )}
-
             <Form onSubmit={handleSubmit}>
-                <Form.Group className="mb-3" controlId="formEmail">
+                <Form.Group className="mb-3" controlId="formFirstName">
                     <Form.Label>First name</Form.Label>
                     <Form.Control
-                        type="firstName"
+                        type="text"
                         placeholder="Enter first name"
                         value={firstName}
                         onChange={(e) => setFirstName(e.target.value)}
                         required
                     />
                 </Form.Group>
-                <Form.Group className="mb-3" controlId="formEmail">
+                <Form.Group className="mb-3" controlId="formLastName">
                     <Form.Label>Last name</Form.Label>
                     <Form.Control
-                        type="lastName"
+                        type="text"
                         placeholder="Enter last name"
                         value={lastName}
                         onChange={(e) => setLastName(e.target.value)}

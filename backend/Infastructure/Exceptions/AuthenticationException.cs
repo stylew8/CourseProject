@@ -1,9 +1,8 @@
 using System.Net;
+using Server.Infrastructure.Exceptions;
 
-public class AuthenticationException : Exception
+public class AuthenticationException : ApiServiceException
     {
-        public int StatusCode { get; }
-
         public AuthenticationException(string message, int statusCode = (int)HttpStatusCode.Unauthorized)
             : base(message)
         {

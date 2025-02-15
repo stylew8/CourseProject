@@ -1,8 +1,14 @@
+using backend.Repositories;
 using backend.Repositories.Models;
 using backend.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Server.Infrastructure;
+using System.Text;
+using System.Text.Json.Serialization;
 
 namespace backend
 {
@@ -23,11 +29,15 @@ namespace backend
 
         private static void ConfigureServices(IServiceCollection services, IConfiguration configuration)
         {
-            services.AddControllers();
+            services.AddControllers()
+                .AddJsonOptions(options =>
+                {
+                    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+                });
 
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen();
-            
+
             services.AddExceptionHandler<GlobalExceptionHandler>();
             services.AddProblemDetails();
 
@@ -43,6 +53,8 @@ namespace backend
             services.AddScoped<IJwtTokenService, JwtTokenService>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IUserInformationRepository, UserInformationRepository>();
+            services.AddScoped<ITemplatesRepository, TemplatesRepository>();
+            services.AddScoped<ITemplatesService, TemplatesService>();
 
             services.AddCors(options =>
             {
@@ -52,6 +64,42 @@ namespace backend
                             .AllowAnyHeader()
                             .AllowCredentials());
             });
+
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(options =>
+            {
+                options.Events = new JwtBearerEvents
+                {
+                    OnMessageReceived = context =>
+                    {
+                        var token = context.Request.Cookies["access_token"];
+                        if (!string.IsNullOrEmpty(token))
+                        {
+                            context.Token = token;
+                        }
+                        return Task.CompletedTask;
+                    }
+                };
+
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = configuration["JWT:Issuer"],
+                    ValidAudience = configuration["JWT:Audience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Key"]))
+                };
+            });
+
+            services.AddAuthorization();
+            services.AddSingleton<IAuthorizationHandler, OwnerOrAdminHandler>();
+
         }
 
         private static void ConfigureMiddleware(WebApplication app)
@@ -64,7 +112,7 @@ namespace backend
 
             app.UseExceptionHandler();
 
-            app.UseHttpsRedirection();
+            // app.UseHttpsRedirection();
 
             app.UseCors("AllowAll");
 

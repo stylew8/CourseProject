@@ -3,24 +3,27 @@ import { Container, Form, Button, Card } from 'react-bootstrap';
 import DraggableQuestion from '../components/DraggableQuestion';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
+import { useParams, useNavigate } from 'react-router-dom';
+import { getTemplate, updateTemplate } from '../api/templateService';
 
-const EditTemplatePage = ({ templateId }) => {
+const EditTemplatePage = () => {
+    const { templateId } = useParams();
+    const navigate = useNavigate();
     const [template, setTemplate] = useState(null);
     const [questions, setQuestions] = useState([]);
 
     useEffect(() => {
-        // Имитация загрузки шаблона (в реальном случае делайте запрос к API)
-        const fetchedTemplate = {
-            id: templateId,
-            title: 'Job Application',
-            description: 'Apply for your dream job using this form.',
-            questions: [
-                { id: 1, type: 'single-line', text: 'What position are you applying for?', description: '', showInTable: true, options: [] },
-                { id: 2, type: 'integer', text: 'Years of experience', description: '', showInTable: true, options: [{ id: 1, value: '1-3' }, { id: 2, value: '4-6' }, { id: 3, value: '7+' }] }
-            ]
+        const fetchTemplate = async () => {
+            try {
+                const data = await getTemplate(templateId);
+                setTemplate(data);
+                const sortedQuestions = data.questions.sort((a, b) => a.order - b.order);
+                setQuestions(sortedQuestions);
+            } catch (error) {
+                console.error('Error fetching template:', error.response?.data || error.message);
+            }
         };
-        setTemplate(fetchedTemplate);
-        setQuestions(fetchedTemplate.questions);
+        fetchTemplate();
     }, [templateId]);
 
     const handleTemplateChange = (key, value) => {
@@ -33,27 +36,66 @@ const EditTemplatePage = ({ templateId }) => {
         setQuestions(updated);
     };
 
+    const handleOptionsChange = (questionIndex, newOptions) => {
+        const updatedQuestions = [...questions];
+        updatedQuestions[questionIndex].options = newOptions;
+        setQuestions(updatedQuestions);
+    };
+
+    const addOptionToQuestion = (questionIndex) => {
+        const updatedQuestions = [...questions];
+        const newOption = {
+            id: Date.now(),
+            order: updatedQuestions[questionIndex].options.length,
+            value: ""
+        };
+        updatedQuestions[questionIndex].options.push(newOption);
+        setQuestions(updatedQuestions);
+    };
+
+    const handleOptionChange = (questionIndex, optionIndex, value) => {
+        const updatedQuestions = [...questions];
+        updatedQuestions[questionIndex].options[optionIndex].value = value;
+        setQuestions(updatedQuestions);
+    };
+
     const addQuestion = () => {
-        setQuestions([...questions, { id: Date.now(), type: 'single-line', text: '', description: '', showInTable: false, options: [] }]);
+        const newQuestion = {
+            id: Date.now(),
+            order: questions.length,
+            type: 'single-line',
+            text: '',
+            description: '',
+            showInTable: false,
+            options: []
+        };
+        setQuestions([...questions, newQuestion]);
     };
 
     const removeQuestion = (index) => {
         const updated = questions.filter((_, i) => i !== index);
+        updated.forEach((q, i) => { q.order = i; });
         setQuestions(updated);
     };
 
     const moveQuestion = (dragIndex, hoverIndex) => {
-        const dragged = questions[dragIndex];
         const updated = [...questions];
-        updated.splice(dragIndex, 1);
-        updated.splice(hoverIndex, 0, dragged);
+        const [movedQuestion] = updated.splice(dragIndex, 1);
+        updated.splice(hoverIndex, 0, movedQuestion);
+        updated.forEach((q, i) => { q.order = i; });
         setQuestions(updated);
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        // Здесь отправьте изменённый шаблон и вопросы на сервер
-        console.log('Updated Template:', { ...template, questions });
+        const updatedTemplate = { ...template, questions };
+        try {
+            const result = await updateTemplate(template.id, updatedTemplate);
+            console.log('Template updated:', result);
+            navigate(`/template/${template.id}`);
+        } catch (error) {
+            console.error('Error updating template:', error.response?.data || error.message);
+        }
     };
 
     if (!template) return <div>Loading...</div>;
@@ -90,6 +132,9 @@ const EditTemplatePage = ({ templateId }) => {
                                 moveQuestion={moveQuestion}
                                 handleQuestionChange={handleQuestionChange}
                                 removeQuestion={removeQuestion}
+                                updateOptions={handleOptionsChange}
+                                addOptionToQuestion={addOptionToQuestion}
+                                handleOptionChange={handleOptionChange}
                             />
                         ))}
                     </DndProvider>

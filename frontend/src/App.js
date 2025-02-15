@@ -1,9 +1,8 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import React, { useContext } from 'react';
+import { BrowserRouter as Router, Routes, Route, Link, Navigate } from 'react-router-dom';
 import { Container, Navbar, Nav } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-// Pages
 import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
@@ -11,14 +10,17 @@ import TemplatePage from './pages/TemplatePage';
 import UserDashboard from './pages/UserDashboard';
 import AdminPage from './pages/AdminPage';
 import CreateTemplatePage from './pages/CreateTemplatePage';
-
-// Components
-import ProtectedRoute from './components/ProtectedRoute';
-import ThemeSwitcher from './components/ThemeSwitcher';
 import EditFormPage from './pages/EditFormPage';
 import EditTemplatePage from './pages/EditTemplatePage';
 
+import ProtectedRoute from './components/ProtectedRoute';
+import ThemeSwitcher from './components/ThemeSwitcher';
+
+import { AuthContext } from './context/AuthContext';
+
 function App() {
+    const { isAuthenticated, logout } = useContext(AuthContext);
+
     return (
         <Router>
             <Navbar bg="dark" variant="dark" expand="lg" className="shadow">
@@ -48,6 +50,22 @@ function App() {
                                 Edit Template
                             </Nav.Link>
                         </Nav>
+                        <Nav>
+                            {isAuthenticated ? (
+                                <Nav.Link onClick={logout} className="text-light">
+                                    Logout
+                                </Nav.Link>
+                            ) : (
+                                <>
+                                    <Nav.Link as={Link} to="/login" className="text-light">
+                                        Login
+                                    </Nav.Link>
+                                    <Nav.Link as={Link} to="/register" className="text-light">
+                                        Register
+                                    </Nav.Link>
+                                </>
+                            )}
+                        </Nav>
                     </Navbar.Collapse>
                     <ThemeSwitcher />
                 </Container>
@@ -59,11 +77,12 @@ function App() {
                     <Route path="/login" element={<LoginPage />} />
                     <Route path="/register" element={<RegisterPage />} />
                     <Route path="/dashboard" element={<ProtectedRoute component={UserDashboard} />} />
-                    <Route path="/template/:id" element={<ProtectedRoute component={TemplatePage} />} />
+                    <Route path="/template/:id" element={<TemplatePage />} />
                     <Route path="/admin" element={<ProtectedRoute component={AdminPage} adminOnly={true} />} />
                     <Route path="/create-template" element={<ProtectedRoute component={CreateTemplatePage} />} />
                     <Route path="/edit-page/:formId" element={<ProtectedRoute component={EditFormPage} />} />
                     <Route path="/edit-template/:templateId" element={<ProtectedRoute component={EditTemplatePage} />} />
+                    <Route path="*" element={<Navigate to="/" replace />} />
                 </Routes>
             </Container>
         </Router>

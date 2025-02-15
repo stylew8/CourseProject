@@ -1,19 +1,25 @@
-import React, { useState } from 'react';
+// src/pages/LoginPage.js
+import React, { useState, useContext, useEffect } from 'react';
 import { Form, Button, Alert } from 'react-bootstrap';
-import { useDispatch, useSelector } from 'react-redux';
-import { loginUser } from '../redux/authSlice';
+import { AuthContext } from '../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 const LoginPage = () => {
-    const dispatch = useDispatch();
+    const { login, loading, error, isAuthenticated } = useContext(AuthContext);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [rememberMe, setRememberMe] = useState(false);
+    const navigate = useNavigate();
 
-    const { loading, error } = useSelector((state) => state.auth);
+    useEffect(() => {
+        if (isAuthenticated) {
+            navigate('/dashboard');
+        }
+    }, [isAuthenticated, navigate]);
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        dispatch(loginUser({ email, password, rememberMe }));
+        await login(email, password, rememberMe);
     };
 
     return (
@@ -26,6 +32,7 @@ const LoginPage = () => {
                             ? (error.detail || error.title || JSON.stringify(error))
                             : error
                         )
+                            .toString()
                             .split('\n')
                             .map((line, idx) => (
                                 <li key={idx}>{line}</li>

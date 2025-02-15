@@ -3,13 +3,25 @@ import { Card, Row, Col, Form, Button, InputGroup } from 'react-bootstrap';
 import { GripVertical } from 'react-bootstrap-icons';
 import OptionItem from './OptionItem';
 
-const QuestionCard = ({ question, index, dragHandleRef, handleQuestionChange, handleOptionChange, updateOptions, addOptionToQuestion, removeQuestion }) => {
+const QuestionCard = ({
+    question,
+    index,
+    dragHandleRef,
+    handleQuestionChange,
+    handleOptionChange,
+    updateOptions,
+    addOptionToQuestion,
+    removeQuestion,
+}) => {
     const questionTypes = ["single-line", "multi-line", "dropdown", "checkbox"];
 
     const reorderOption = (dragIndex, hoverIndex) => {
         const updatedOptions = Array.from(question.options);
         const [movedOption] = updatedOptions.splice(dragIndex, 1);
         updatedOptions.splice(hoverIndex, 0, movedOption);
+        updatedOptions.forEach((option, i) => {
+            option.order = i;
+        });
         updateOptions(index, updatedOptions);
     };
 
@@ -17,6 +29,9 @@ const QuestionCard = ({ question, index, dragHandleRef, handleQuestionChange, ha
         if (question.options[optionIndex]) {
             const updatedOptions = [...question.options];
             updatedOptions.splice(optionIndex, 1);
+            updatedOptions.forEach((option, i) => {
+                option.order = i;
+            });
             updateOptions(index, updatedOptions);
         }
     };

@@ -57,13 +57,17 @@ namespace backend.Controllers
 
             await _userInformationRepository.CreateUserInformationAsync(userInfo);
 
-            // Определяем время жизни токена, например, 1 час (можно изменить или добавить RememberMe)
             var tokenExpiry = TimeSpan.FromHours(1);
 
-            // Используем общий метод для установки cookie
-            SignInUser(createdUser, tokenExpiry);
+            var userRoles = await _userManager.GetRolesAsync(createdUser);
 
-            return Ok(new { message = "User was successfully registered and logged in" });
+            SignInUser(createdUser, tokenExpiry, userRoles);
+
+            return Ok(new
+            {
+                user = new { createdUser.Id, createdUser.Email, createdUser.UserName },
+                roles = userRoles
+            });
         }
 
 
@@ -83,29 +87,74 @@ namespace backend.Controllers
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
 
-            var userRoles = await _userManager.GetRolesAsync(user);
-            foreach (var role in userRoles)
-            {
-                authClaims.Add(new Claim(ClaimTypes.Role, role));
-            }
 
             var tokenExpiry = model.RememberMe ? TimeSpan.FromDays(7) : TimeSpan.FromHours(1);
 
-            SignInUser(user, tokenExpiry);
+            var userRoles = await _userManager.GetRolesAsync(user);
 
-            return Ok(new { message = "Login successful" });
+            SignInUser(user, tokenExpiry, userRoles);
+
+            return Ok(new
+            {
+                user = new { user.Id, user.Email, user.UserName },
+                roles = userRoles
+            });
         }
 
-        private void SignInUser(IdentityUser user, TimeSpan tokenExpiry)
+        [HttpGet("me")]
+        public async Task<IActionResult> GetCurrentUser()
         {
-            // Формирование списка клеймов
+            if (!User.Identity.IsAuthenticated)
+            {
+                return Unauthorized();
+            }
+
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(userId))
+            {
+                return Unauthorized();
+            }
+
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+
+            var roles = await _userManager.GetRolesAsync(user);
+
+            return Ok(new
+            {
+                user = new { user.Id, user.Email, user.UserName },
+                roles = roles
+            });
+        }
+
+        [HttpPost("logout")]
+        public IActionResult Logout()
+        {
+            var cookieOptions = new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = true,
+                SameSite = SameSiteMode.Lax,
+                Expires = DateTime.UtcNow.AddDays(-1)
+            };
+
+            Response.Cookies.Append("access_token", "", cookieOptions);
+
+            return Ok(new { message = "Successfully logged out" });
+        }
+
+
+        private void SignInUser(IdentityUser user, TimeSpan tokenExpiry, IList<string> userRoles)
+        {
             var authClaims = new List<Claim>
                 {
-                    new Claim(ClaimTypes.Name, user.UserName),
+                    new Claim(ClaimTypes.NameIdentifier, user.Id),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
                 };
 
-            var userRoles = _userManager.GetRolesAsync(user).Result; // Можно сделать асинхронно, если переписать метод SignInUser как async
             foreach (var role in userRoles)
             {
                 authClaims.Add(new Claim(ClaimTypes.Role, role));

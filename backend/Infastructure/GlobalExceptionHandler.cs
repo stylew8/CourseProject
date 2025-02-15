@@ -70,6 +70,22 @@ namespace Server.Infrastructure
                     }
                 });
             }
+            else if (exception is ServerInternalException serEx)
+            {
+                _logger.LogError($"Validation error: {serEx.Message}");
+                httpContext.Response.StatusCode = serEx.StatusCode;
+
+                return await _problemDetailsService.TryWriteAsync(new ProblemDetailsContext()
+                {
+                    HttpContext = httpContext,
+                    ProblemDetails = new ProblemDetails()
+                    {
+                        Status = serEx.StatusCode,
+                        Title = "Validation Error",
+                        Detail = "Server internal error"
+                    }
+                });
+            }
 
             _logger.LogError(exception, "An unhandled exception occurred.");
             httpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;

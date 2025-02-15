@@ -1,16 +1,29 @@
+// src/pages/CreateTemplatePage.js
 import React, { useState } from 'react';
 import { Form, Button, Container, Card } from 'react-bootstrap';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import DraggableQuestion from '../components/DraggableQuestion';
+import { createTemplate } from '../api/templateService';
+import { useNavigate } from 'react-router-dom';
 
 const CreateTemplatePage = () => {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [questions, setQuestions] = useState([]);
+    const navigate = useNavigate();
 
     const addQuestion = () => {
-        setQuestions([...questions, { type: 'single-line', text: '', description: '', showInTable: false, options: [] }]);
+        const newQuestion = {
+            id: Date.now(),
+            order: questions.length,
+            type: 'single-line',
+            text: '',
+            description: '',
+            showInTable: false,
+            options: []
+        };
+        setQuestions([...questions, newQuestion]);
     };
 
     const handleQuestionChange = (index, key, value) => {
@@ -22,7 +35,12 @@ const CreateTemplatePage = () => {
     const addOptionToQuestion = (index) => {
         const updatedQuestions = [...questions];
         if (updatedQuestions[index].options.length < 4) {
-            updatedQuestions[index].options.push({ id: Date.now(), value: '' });
+            const newOption = {
+                id: Date.now(),
+                order: updatedQuestions[index].options.length,
+                value: ''
+            };
+            updatedQuestions[index].options.push(newOption);
             setQuestions(updatedQuestions);
         } else {
             alert('Maximum of 4 options allowed');
@@ -39,12 +57,18 @@ const CreateTemplatePage = () => {
 
     const updateOptions = (questionIndex, newOptions) => {
         const updatedQuestions = [...questions];
+        newOptions.forEach((option, i) => {
+            option.order = i;
+        });
         updatedQuestions[questionIndex].options = newOptions;
         setQuestions(updatedQuestions);
     };
 
     const removeQuestion = (index) => {
         const updatedQuestions = questions.filter((_, i) => i !== index);
+        updatedQuestions.forEach((q, i) => {
+            q.order = i;
+        });
         setQuestions(updatedQuestions);
     };
 
@@ -52,12 +76,22 @@ const CreateTemplatePage = () => {
         const updatedQuestions = Array.from(questions);
         const [movedQuestion] = updatedQuestions.splice(dragIndex, 1);
         updatedQuestions.splice(hoverIndex, 0, movedQuestion);
+        updatedQuestions.forEach((q, i) => {
+            q.order = i;
+        });
         setQuestions(updatedQuestions);
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log('Form Data:', { title, description, questions });
+        const data = { title, description, questions };
+        try {
+            const result = await createTemplate(data);
+            console.log('Template created:', result);
+            navigate(`/edit-template/${result.id}`);
+        } catch (error) {
+            console.error('Error creating template:', error.response?.data || error.message);
+        }
     };
 
     return (
@@ -90,7 +124,7 @@ const CreateTemplatePage = () => {
                     <DndProvider backend={HTML5Backend}>
                         {questions.map((question, index) => (
                             <DraggableQuestion
-                                key={index}
+                                key={question.id}
                                 index={index}
                                 question={question}
                                 handleQuestionChange={handleQuestionChange}
