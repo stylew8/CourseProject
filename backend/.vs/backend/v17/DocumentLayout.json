@@ -3,20 +3,24 @@
   "WorkspaceRootPath": "C:\\Users\\vania\\Desktop\\Itransition\\CourseProject\\backend\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{F5A75263-518D-4080-861E-BD1C46696CE5}|backend.csproj|c:\\users\\vania\\desktop\\itransition\\courseproject\\backend\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{F5A75263-518D-4080-861E-BD1C46696CE5}|backend.csproj|solutionrelative:controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{F5A75263-518D-4080-861E-BD1C46696CE5}|backend.csproj|c:\\users\\vania\\desktop\\itransition\\courseproject\\backend\\controllers\\templatescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{F5A75263-518D-4080-861E-BD1C46696CE5}|backend.csproj|solutionrelative:controllers\\templatescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{F5A75263-518D-4080-861E-BD1C46696CE5}|backend.csproj|c:\\users\\vania\\desktop\\itransition\\courseproject\\backend\\repositories\\templatesrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{F5A75263-518D-4080-861E-BD1C46696CE5}|backend.csproj|solutionrelative:repositories\\templatesrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{F5A75263-518D-4080-861E-BD1C46696CE5}|backend.csproj|c:\\users\\vania\\desktop\\itransition\\courseproject\\backend\\repositories\\models\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F5A75263-518D-4080-861E-BD1C46696CE5}|backend.csproj|solutionrelative:repositories\\models\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{F5A75263-518D-4080-861E-BD1C46696CE5}|backend.csproj|c:\\users\\vania\\desktop\\itransition\\courseproject\\backend\\repositories\\itemplatesrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{F5A75263-518D-4080-861E-BD1C46696CE5}|backend.csproj|solutionrelative:repositories\\itemplatesrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{F5A75263-518D-4080-861E-BD1C46696CE5}|backend.csproj|c:\\users\\vania\\desktop\\itransition\\courseproject\\backend\\repositories\\models\\answersnapshot.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F5A75263-518D-4080-861E-BD1C46696CE5}|backend.csproj|solutionrelative:repositories\\models\\answersnapshot.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F5A75263-518D-4080-861E-BD1C46696CE5}|backend.csproj|c:\\users\\vania\\desktop\\itransition\\courseproject\\backend\\repositories\\models\\filledform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F5A75263-518D-4080-861E-BD1C46696CE5}|backend.csproj|solutionrelative:repositories\\models\\filledform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F5A75263-518D-4080-861E-BD1C46696CE5}|backend.csproj|c:\\users\\vania\\desktop\\itransition\\courseproject\\backend\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F5A75263-518D-4080-861E-BD1C46696CE5}|backend.csproj|solutionrelative:controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{F5A75263-518D-4080-861E-BD1C46696CE5}|backend.csproj|c:\\users\\vania\\desktop\\itransition\\courseproject\\backend\\services\\templatesservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -27,24 +31,28 @@
       "RelativeMoniker": "D:0:0:{F5A75263-518D-4080-861E-BD1C46696CE5}|backend.csproj|solutionrelative:services\\itemplatesservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{F5A75263-518D-4080-861E-BD1C46696CE5}|backend.csproj|c:\\users\\vania\\desktop\\itransition\\courseproject\\backend\\infastructure\\exceptions\\apiserviceexception.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{F5A75263-518D-4080-861E-BD1C46696CE5}|backend.csproj|solutionrelative:infastructure\\exceptions\\apiserviceexception.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{F5A75263-518D-4080-861E-BD1C46696CE5}|backend.csproj|c:\\users\\vania\\desktop\\itransition\\courseproject\\backend\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{F5A75263-518D-4080-861E-BD1C46696CE5}|backend.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{F5A75263-518D-4080-861E-BD1C46696CE5}|backend.csproj|c:\\users\\vania\\desktop\\itransition\\courseproject\\backend\\infastructure\\exceptions\\notfoundexception.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{F5A75263-518D-4080-861E-BD1C46696CE5}|backend.csproj|solutionrelative:infastructure\\exceptions\\notfoundexception.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{F5A75263-518D-4080-861E-BD1C46696CE5}|backend.csproj|c:\\users\\vania\\desktop\\itransition\\courseproject\\backend\\repositories\\models\\template.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{F5A75263-518D-4080-861E-BD1C46696CE5}|backend.csproj|solutionrelative:repositories\\models\\template.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{F5A75263-518D-4080-861E-BD1C46696CE5}|backend.csproj|c:\\users\\vania\\desktop\\itransition\\courseproject\\backend\\repositories\\models\\question.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{F5A75263-518D-4080-861E-BD1C46696CE5}|backend.csproj|solutionrelative:repositories\\models\\question.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F5A75263-518D-4080-861E-BD1C46696CE5}|backend.csproj|c:\\users\\vania\\desktop\\itransition\\courseproject\\backend\\viewmodels\\dtos\\submitformdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F5A75263-518D-4080-861E-BD1C46696CE5}|backend.csproj|solutionrelative:viewmodels\\dtos\\submitformdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F5A75263-518D-4080-861E-BD1C46696CE5}|backend.csproj|c:\\users\\vania\\desktop\\itransition\\courseproject\\backend\\repositories\\templatesrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F5A75263-518D-4080-861E-BD1C46696CE5}|backend.csproj|solutionrelative:repositories\\templatesrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F5A75263-518D-4080-861E-BD1C46696CE5}|backend.csproj|c:\\users\\vania\\desktop\\itransition\\courseproject\\backend\\repositories\\itemplatesrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F5A75263-518D-4080-861E-BD1C46696CE5}|backend.csproj|solutionrelative:repositories\\itemplatesrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F5A75263-518D-4080-861E-BD1C46696CE5}|backend.csproj|c:\\users\\vania\\desktop\\itransition\\courseproject\\backend\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F5A75263-518D-4080-861E-BD1C46696CE5}|backend.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{F5A75263-518D-4080-861E-BD1C46696CE5}|backend.csproj|c:\\users\\vania\\desktop\\itransition\\courseproject\\backend\\viewmodels\\loginmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -62,89 +70,115 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 11,
+          "SelectedChildIndex": 10,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "ApiServiceException.cs",
-              "DocumentMoniker": "C:\\Users\\vania\\Desktop\\Itransition\\CourseProject\\backend\\Infastructure\\Exceptions\\ApiServiceException.cs",
-              "RelativeDocumentMoniker": "Infastructure\\Exceptions\\ApiServiceException.cs",
-              "ToolTip": "C:\\Users\\vania\\Desktop\\Itransition\\CourseProject\\backend\\Infastructure\\Exceptions\\ApiServiceException.cs",
-              "RelativeToolTip": "Infastructure\\Exceptions\\ApiServiceException.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAA==",
+              "DocumentIndex": 2,
+              "Title": "AnswerSnapshot.cs",
+              "DocumentMoniker": "C:\\Users\\vania\\Desktop\\Itransition\\CourseProject\\backend\\Repositories\\Models\\AnswerSnapshot.cs",
+              "RelativeDocumentMoniker": "Repositories\\Models\\AnswerSnapshot.cs",
+              "ToolTip": "C:\\Users\\vania\\Desktop\\Itransition\\CourseProject\\backend\\Repositories\\Models\\AnswerSnapshot.cs",
+              "RelativeToolTip": "Repositories\\Models\\AnswerSnapshot.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-15T17:02:58.909Z",
+              "WhenOpened": "2025-02-18T13:28:08.343Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
-              "Title": "NotFoundException.cs",
-              "DocumentMoniker": "C:\\Users\\vania\\Desktop\\Itransition\\CourseProject\\backend\\Infastructure\\Exceptions\\NotFoundException.cs",
-              "RelativeDocumentMoniker": "Infastructure\\Exceptions\\NotFoundException.cs",
-              "ToolTip": "C:\\Users\\vania\\Desktop\\Itransition\\CourseProject\\backend\\Infastructure\\Exceptions\\NotFoundException.cs",
-              "RelativeToolTip": "Infastructure\\Exceptions\\NotFoundException.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAFAAAAAAAAAA==",
+              "DocumentIndex": 3,
+              "Title": "FilledForm.cs",
+              "DocumentMoniker": "C:\\Users\\vania\\Desktop\\Itransition\\CourseProject\\backend\\Repositories\\Models\\FilledForm.cs",
+              "RelativeDocumentMoniker": "Repositories\\Models\\FilledForm.cs",
+              "ToolTip": "C:\\Users\\vania\\Desktop\\Itransition\\CourseProject\\backend\\Repositories\\Models\\FilledForm.cs",
+              "RelativeToolTip": "Repositories\\Models\\FilledForm.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-15T17:02:52.106Z",
+              "WhenOpened": "2025-02-18T13:28:05.389Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 9,
+              "Title": "SubmitFormDto.cs",
+              "DocumentMoniker": "C:\\Users\\vania\\Desktop\\Itransition\\CourseProject\\backend\\ViewModels\\DTOs\\SubmitFormDto.cs",
+              "RelativeDocumentMoniker": "ViewModels\\DTOs\\SubmitFormDto.cs",
+              "ToolTip": "C:\\Users\\vania\\Desktop\\Itransition\\CourseProject\\backend\\ViewModels\\DTOs\\SubmitFormDto.cs",
+              "RelativeToolTip": "ViewModels\\DTOs\\SubmitFormDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAA7AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-18T13:22:07.423Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "AppDbContext.cs",
+              "DocumentMoniker": "C:\\Users\\vania\\Desktop\\Itransition\\CourseProject\\backend\\Repositories\\Models\\AppDbContext.cs",
+              "RelativeDocumentMoniker": "Repositories\\Models\\AppDbContext.cs",
+              "ToolTip": "C:\\Users\\vania\\Desktop\\Itransition\\CourseProject\\backend\\Repositories\\Models\\AppDbContext.cs",
+              "RelativeToolTip": "Repositories\\Models\\AppDbContext.cs",
+              "ViewState": "AgIAABgAAAAAAAAAAAAEwDIAAAAeAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-18T13:16:31.759Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
               "Title": "TemplatesService.cs",
               "DocumentMoniker": "C:\\Users\\vania\\Desktop\\Itransition\\CourseProject\\backend\\Services\\TemplatesService.cs",
               "RelativeDocumentMoniker": "Services\\TemplatesService.cs",
               "ToolTip": "C:\\Users\\vania\\Desktop\\Itransition\\CourseProject\\backend\\Services\\TemplatesService.cs",
               "RelativeToolTip": "Services\\TemplatesService.cs",
-              "ViewState": "AgIAACAAAAAAAAAAAAAawDcAAAA5AAAAAAAAAA==",
+              "ViewState": "AgIAAEcAAAAAAAAAAAAmwGcAAAAxAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-02-15T17:00:33.957Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 6,
               "Title": "ITemplatesService.cs",
               "DocumentMoniker": "C:\\Users\\vania\\Desktop\\Itransition\\CourseProject\\backend\\Services\\ITemplatesService.cs",
               "RelativeDocumentMoniker": "Services\\ITemplatesService.cs",
               "ToolTip": "C:\\Users\\vania\\Desktop\\Itransition\\CourseProject\\backend\\Services\\ITemplatesService.cs",
               "RelativeToolTip": "Services\\ITemplatesService.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAABAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-02-15T17:00:14.38Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 10,
               "Title": "TemplatesRepository.cs",
               "DocumentMoniker": "C:\\Users\\vania\\Desktop\\Itransition\\CourseProject\\backend\\Repositories\\TemplatesRepository.cs",
               "RelativeDocumentMoniker": "Repositories\\TemplatesRepository.cs",
               "ToolTip": "C:\\Users\\vania\\Desktop\\Itransition\\CourseProject\\backend\\Repositories\\TemplatesRepository.cs",
               "RelativeToolTip": "Repositories\\TemplatesRepository.cs",
-              "ViewState": "AgIAABAAAAAAAAAAAAAgwDAAAAAaAAAAAAAAAA==",
+              "ViewState": "AgIAABIAAAAAAAAAAAAswEUAAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-02-15T16:58:09.324Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 11,
               "Title": "ITemplatesRepository.cs",
               "DocumentMoniker": "C:\\Users\\vania\\Desktop\\Itransition\\CourseProject\\backend\\Repositories\\ITemplatesRepository.cs",
               "RelativeDocumentMoniker": "Repositories\\ITemplatesRepository.cs",
               "ToolTip": "C:\\Users\\vania\\Desktop\\Itransition\\CourseProject\\backend\\Repositories\\ITemplatesRepository.cs",
               "RelativeToolTip": "Repositories\\ITemplatesRepository.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAABAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-02-15T16:57:46.771Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 7,
               "Title": "Template.cs",
               "DocumentMoniker": "C:\\Users\\vania\\Desktop\\Itransition\\CourseProject\\backend\\Repositories\\Models\\Template.cs",
               "RelativeDocumentMoniker": "Repositories\\Models\\Template.cs",
@@ -157,33 +191,33 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 8,
               "Title": "Question.cs",
               "DocumentMoniker": "C:\\Users\\vania\\Desktop\\Itransition\\CourseProject\\backend\\Repositories\\Models\\Question.cs",
               "RelativeDocumentMoniker": "Repositories\\Models\\Question.cs",
               "ToolTip": "C:\\Users\\vania\\Desktop\\Itransition\\CourseProject\\backend\\Repositories\\Models\\Question.cs",
               "RelativeToolTip": "Repositories\\Models\\Question.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAewBMAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAVAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-02-15T15:08:05.265Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
               "Title": "TemplatesController.cs",
               "DocumentMoniker": "C:\\Users\\vania\\Desktop\\Itransition\\CourseProject\\backend\\Controllers\\TemplatesController.cs",
               "RelativeDocumentMoniker": "Controllers\\TemplatesController.cs",
               "ToolTip": "C:\\Users\\vania\\Desktop\\Itransition\\CourseProject\\backend\\Controllers\\TemplatesController.cs",
               "RelativeToolTip": "Controllers\\TemplatesController.cs",
-              "ViewState": "AgIAABwAAAAAAAAAAAA2wCsAAAAeAAAAAAAAAA==",
+              "ViewState": "AgIAADAAAAAAAAAAAAAcwEYAAAAsAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-02-15T14:46:54.448Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 13,
               "Title": "LoginModel.cs",
               "DocumentMoniker": "C:\\Users\\vania\\Desktop\\Itransition\\CourseProject\\backend\\ViewModels\\LoginModel.cs",
               "RelativeDocumentMoniker": "ViewModels\\LoginModel.cs",
@@ -195,7 +229,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 12,
+              "DocumentIndex": 14,
               "Title": "RegisterModel.cs",
               "DocumentMoniker": "C:\\Users\\vania\\Desktop\\Itransition\\CourseProject\\backend\\ViewModels\\RegisterModel.cs",
               "RelativeDocumentMoniker": "ViewModels\\RegisterModel.cs",
@@ -207,7 +241,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 4,
               "Title": "AuthController.cs",
               "DocumentMoniker": "C:\\Users\\vania\\Desktop\\Itransition\\CourseProject\\backend\\Controllers\\AuthController.cs",
               "RelativeDocumentMoniker": "Controllers\\AuthController.cs",
@@ -220,7 +254,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 12,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\Users\\vania\\Desktop\\Itransition\\CourseProject\\backend\\Program.cs",
               "RelativeDocumentMoniker": "Program.cs",
@@ -228,8 +262,7 @@
               "RelativeToolTip": "Program.cs",
               "ViewState": "AgIAABkAAAAAAAAAAAAowDgAAAAUAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-13T10:49:21.27Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-02-13T10:49:21.27Z"
             }
           ]
         }

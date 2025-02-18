@@ -29,19 +29,15 @@ public class TemplatesRepository : ITemplatesRepository
 
     public async Task<Template> UpdateTemplateAsync(Template template, TemplateDto dto, bool removeOldQuestions = true)
     {
-        // Обновляем поля шаблона
         template.Title = dto.Title;
         template.Description = dto.Description;
 
         if (removeOldQuestions)
         {
-            // Удаляем предыдущие вопросы
             _context.Questions.RemoveRange(template.Questions);
             await _context.SaveChangesAsync();
-            // Важно сначала сохранить удаление, чтобы избежать конфликтов.
         }
 
-        // Перезаписываем вопросы
         template.Questions = dto.Questions.Select(q => new Question
         {
             Order = q.Order,
@@ -56,8 +52,20 @@ public class TemplatesRepository : ITemplatesRepository
             }).ToList()
         }).ToList();
 
-        // Сохраняем изменения
         await _context.SaveChangesAsync();
         return template;
+    }
+
+    public async Task<Template> GetTemplateWithQuestionsAsync(int templateId)
+    {
+        return await _context.Templates
+            .Include(t => t.Questions)
+            .FirstOrDefaultAsync(t => t.Id == templateId);
+    }
+
+    public async Task AddFilledFormAsync(FilledForm filledForm)
+    {
+        _context.FilledForms.Add(filledForm);
+        await _context.SaveChangesAsync();
     }
 }

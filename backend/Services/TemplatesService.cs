@@ -1,5 +1,7 @@
 ﻿using backend.Repositories.Models;
 using backend.Repositories;
+using backend.ViewModels.DTOs;
+using Newtonsoft.Json.Linq;
 using Server.Infrastructure.Exceptions;
 
 namespace backend.Services;
@@ -59,10 +61,6 @@ public class TemplatesService : ITemplatesService
 
     public async Task<Template> GetTemplatePublicAsync(int id)
     {
-        // Пример: если "публичная" версия шаблона не требует опций, 
-        // можно получить без Include, 
-        // или вернуть часть полей. Здесь просто вернём полную,
-        // а в Controller можно отфильтровать
         var template = await _templatesRepository.GetTemplateByIdFullAsync(id);
         return template;
     }
@@ -73,8 +71,52 @@ public class TemplatesService : ITemplatesService
         if (template == null)
             throw new NotFoundException("Template not found");
 
-        // Обновляем через репозиторий
         await _templatesRepository.UpdateTemplateAsync(template, dto);
         return template;
+    }
+
+    public async Task<int> SubmitFormAsync(int templateId, SubmitFormDto dto)
+    {
+        var template = await _templatesRepository.GetTemplateWithQuestionsAsync(templateId);
+        if (template == null)
+            throw new NotFoundException("Template not found");
+
+        var filledForm = new FilledForm
+        {
+            TemplateId = templateId,
+            SubmittedAt = DateTime.UtcNow,
+        };
+
+        foreach (var kvp in dto.Answers)
+        {
+            if (!int.TryParse(kvp.Key, out int questionId))
+                continue;
+
+            var question = template.Questions.FirstOrDefault(q => q.Id == questionId);
+            if (question == null)
+                continue;
+
+            string answerValue = string.Empty;
+
+            if (kvp.Value is JArray jArray)
+            {
+                var list = jArray.ToObject<List<string>>();
+                answerValue = string.Join(",", list);
+            }
+            else
+            {
+                answerValue = kvp.Value?.ToString();
+            }
+
+            filledForm.Answers.Add(new AnswerSnapshot
+            {
+                QuestionId = questionId,
+                QuestionTextSnapshot = question.Text,
+                AnswerValue = answerValue
+            });
+        }
+
+        await _templatesRepository.AddFilledFormAsync(filledForm);
+        return filledForm.Id;
     }
 }

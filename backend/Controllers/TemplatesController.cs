@@ -6,6 +6,7 @@ using Server.Infrastructure.Exceptions;
 using System.Security.Claims;
 using Server.Infrastructure.Middlewares;
 using backend.Services;
+using backend.ViewModels.DTOs;
 
 namespace backend.Controllers
 {
@@ -67,13 +68,19 @@ namespace backend.Controllers
             if (template == null)
                 return NotFound();
 
-            // Проверяем доступ: владелец или админ
             var authResult = await _authorizationService.AuthorizeAsync(User, template, new OwnerOrAdminRequirement());
             if (!authResult.Succeeded)
                 return Forbid();
 
             var updated = await _templatesService.UpdateTemplateAsync(id, dto);
             return Ok(updated);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SubmitForm([FromQuery] int templateId, [FromBody] SubmitFormDto dto)
+        {
+            var filledFormId = await _templatesService.SubmitFormAsync(templateId, dto);
+            return Ok(new { FilledFormId = filledFormId });
         }
     }
 }

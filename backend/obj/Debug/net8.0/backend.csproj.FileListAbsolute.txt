@@ -147,3 +147,4 @@ C:\Users\vania\Desktop\Itransition\CourseProject\backend\bin\Debug\net8.0\Micros
 C:\Users\vania\Desktop\Itransition\CourseProject\backend\bin\Debug\net8.0\Microsoft.IdentityModel.Protocols.dll
 C:\Users\vania\Desktop\Itransition\CourseProject\backend\bin\Debug\net8.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
 C:\Users\vania\Desktop\Itransition\CourseProject\backend\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
+C:\Users\vania\Desktop\Itransition\CourseProject\backend\bin\Debug\net8.0\Newtonsoft.Json.dll

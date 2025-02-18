@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.Emit;
 
 namespace backend.Repositories.Models
 {
@@ -14,6 +15,7 @@ namespace backend.Repositories.Models
         public DbSet<Template> Templates { get; set; }
         public DbSet<Question> Questions { get; set; }
         public DbSet<Option> Options { get; set; }
+        public DbSet<FilledForm> FilledForms { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -40,6 +42,14 @@ namespace backend.Repositories.Models
                 .HasIndex(q => new { q.TemplateId, q.Order });
             builder.Entity<Option>()
                 .HasIndex(o => new { o.QuestionId, o.Order });
+
+            builder.Entity<FilledForm>().OwnsMany(ff => ff.Answers, a =>
+            {
+                a.WithOwner().HasForeignKey("FilledFormId");
+                a.Property<int>("Id").ValueGeneratedOnAdd();
+                a.HasKey("Id");
+                a.ToTable("AnswerSnapshots");
+            });
         }
     }
 }

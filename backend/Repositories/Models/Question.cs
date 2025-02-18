@@ -1,4 +1,3 @@
-// Models/Question.cs
 using System.Text.Json.Serialization;
 
 namespace backend.Repositories.Models

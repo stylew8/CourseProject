@@ -53,6 +53,27 @@
   },
   {
     "ContainingType": "backend.Controllers.TemplatesController",
+    "Method": "SubmitForm",
+    "RelativePath": "Templates",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "templateId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "dto",
+        "Type": "backend.ViewModels.DTOs.SubmitFormDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "backend.Controllers.TemplatesController",
     "Method": "GetTemplatePrivate",
     "RelativePath": "Templates/{id}",
     "HttpMethod": "GET",

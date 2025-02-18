@@ -7,4 +7,6 @@ public interface ITemplatesRepository
     Task<Template> CreateTemplateAsync(Template template);
     Task<Template> GetTemplateByIdFullAsync(int id);
     Task<Template> UpdateTemplateAsync(Template template, TemplateDto dto, bool removeOldQuestions = true);
+    Task<Template> GetTemplateWithQuestionsAsync(int templateId);
+    Task AddFilledFormAsync(FilledForm filledForm);
 }
