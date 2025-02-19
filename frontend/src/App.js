@@ -43,7 +43,7 @@ function App() {
                             <Nav.Link as={Link} to="/create-template" className="text-light">
                                 Create Template
                             </Nav.Link>
-                            <Nav.Link as={Link} to="/edit-page/1" className="text-light">
+                            <Nav.Link as={Link} to="/edit-form/1" className="text-light">
                                 Edit Form
                             </Nav.Link>
                             <Nav.Link as={Link} to="/edit-template/1" className="text-light">
@@ -80,7 +80,7 @@ function App() {
                     <Route path="/template/:id" element={<TemplatePage />} />
                     <Route path="/admin" element={<ProtectedRoute component={AdminPage} adminOnly={true} />} />
                     <Route path="/create-template" element={<ProtectedRoute component={CreateTemplatePage} />} />
-                    <Route path="/edit-page/:formId" element={<ProtectedRoute component={EditFormPage} />} />
+                    <Route path="/edit-form/:formId" element={<ProtectedRoute component={EditFormPage} />} />
                     <Route path="/edit-template/:templateId" element={<ProtectedRoute component={EditTemplatePage} />} />
                     <Route path="*" element={<Navigate to="/" replace />} />
                 </Routes>

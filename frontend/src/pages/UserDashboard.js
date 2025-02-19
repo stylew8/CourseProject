@@ -1,31 +1,57 @@
-import React from 'react';
-import { Tabs, Tab, Container } from 'react-bootstrap';
+import React, { useState, useEffect } from 'react';
+import { Container, Tabs, Tab } from 'react-bootstrap';
 import TemplateCard from '../components/TemplateCard';
 import FormList from '../components/FormList';
+import axiosInstance from '../api/axiosInstance';
 
 const UserDashboard = () => {
-    const templates = [
-        { id: 1, title: 'Job Application', description: 'Apply for your dream job using this form.' },
-        { id: 2, title: 'Customer Feedback', description: 'Collect feedback from your customers.' }
-    ];
+    const [templates, setTemplates] = useState([]);
+    const [forms, setForms] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState('');
 
-    const forms = [
-        { id: 1, user: 'John Doe', date: '2025-02-01' },
-        { id: 2, user: 'Jane Smith', date: '2025-02-05' }
-    ];
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const templatesResponse = await axiosInstance.get('/dashboard/templates');
+                const formsResponse = await axiosInstance.get('/dashboard/filledforms');
+                setTemplates(templatesResponse.data);
+                setForms(formsResponse.data);
+            } catch (err) {
+                console.error('Error fetching dashboard data:', err.response?.data || err.message);
+                setError(err.response?.data || err.message);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchData();
+    }, []);
+
+    if (loading) return <div>Loading...</div>;
+    if (error) return <div>Error: {error}</div>;
 
     return (
         <Container>
             <h1>User Dashboard</h1>
             <Tabs defaultActiveKey="templates" className="mb-3">
-                <Tab eventKey="templates" title="My Templates">
-                    {templates.map(template => (
-                        <TemplateCard key={template.id} template={template} />
-                    ))}
-                </Tab>
-                <Tab eventKey="forms" title="My Filled Forms">
-                    <FormList forms={forms} />
-                </Tab>
+                {[
+                    <Tab eventKey="templates" title="My Templates" key="templates">
+                        {templates.length === 0 ? (
+                            <p>No templates found.</p>
+                        ) : (
+                            templates.map((template, index) => (
+                                <TemplateCard key={`${template.id}-${index}`} template={template} />
+                            ))
+                        )}
+                    </Tab>,
+                    <Tab eventKey="forms" title="My Filled Forms" key="forms">
+                        {forms.length === 0 ? (
+                            <p>No filled forms found.</p>
+                        ) : (
+                            <FormList forms={forms} />
+                        )}
+                    </Tab>
+                ]}
             </Tabs>
         </Container>
     );

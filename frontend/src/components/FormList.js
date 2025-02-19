@@ -5,16 +5,15 @@ import { Link } from 'react-router-dom';
 const FormList = ({ forms }) => {
     return (
         <ListGroup>
-            {forms.map(form => (
+            {forms.map((form, index) => (
                 <ListGroup.Item
-                    key={form.id}
+                    key={`${form.id}-${index}`}
                     className="d-flex justify-content-between align-items-center"
                 >
                     <div>
-                        <strong>{form.user}</strong> - {form.date}
+                        <strong>{form.templateName}</strong> - {new Date(form.submittedAt).toLocaleDateString()}
                     </div>
-                    {/* Ссылка на страницу редактирования формы с передачей id */}
-                    <Link to={`/edit-page/${form.id}`}>
+                    <Link to={`/edit-form/${form.id}`}>
                         <Button variant="outline-primary" size="sm">
                             Edit
                         </Button>

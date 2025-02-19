@@ -6,6 +6,7 @@ public interface IUserInformationRepository
 {
     Task CreateUserInformationAsync(UserInformation userInformation);
     Task<UserInformation> GetUserInformationByUserIdAsync(string userId);
+    Task<List<UserInformation>> GetAllUserInformationAsync();
 }
 
 public class UserInformationRepository : IUserInformationRepository
@@ -26,5 +27,10 @@ public class UserInformationRepository : IUserInformationRepository
     public async Task<UserInformation> GetUserInformationByUserIdAsync(string userId)
     {
         return await _context.UserInformations.FirstOrDefaultAsync(ui => ui.UserId == userId);
+    }
+
+    public async Task<List<UserInformation>> GetAllUserInformationAsync()
+    {
+        return await _context.UserInformations.ToListAsync();
     }
 }

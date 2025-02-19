@@ -1,63 +1,77 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import { Container, Form, Button, Card } from 'react-bootstrap';
+import { useNavigate, useParams } from 'react-router-dom';
+import { Container, Form, Button, Card, Alert } from 'react-bootstrap';
+import axiosInstance from '../api/axiosInstance';
 
 const EditFormPage = () => {
     const { formId } = useParams();
     const [formData, setFormData] = useState(null);
+    const [submitError, setSubmitError] = useState('');
+    const [submitSuccess, setSubmitSuccess] = useState('');
+    const navigate = useNavigate();
 
     useEffect(() => {
-        // Имитация загрузки данных заполненной формы по formId
-        const fetchedForm = {
-            id: formId,
-            user: 'John Doe',
-            questions: [
-                {
-                    id: 1,
-                    type: 'single-line',
-                    text: 'What is your position?',
-                    answer: 'Developer'
-                },
-                {
-                    id: 2,
-                    type: 'dropdown',
-                    text: 'Select your experience level',
-                    options: ['1', '2', '3', '4', '5'],
-                    answer: '5'
-                },
-                {
-                    id: 3,
-                    type: 'checkbox',
-                    text: 'Select your skills',
-                    options: ['JavaScript', 'React', 'Node.js'],
-                    answer: ['JavaScript', 'React']
-                }
-            ]
+        const fetchFormData = async () => {
+            try {
+                const response = await axiosInstance.get(`/filledForms/${formId}`);
+                setFormData(response.data);
+                console.log(response.data);
+            } catch (error) {
+                console.error('Error fetching form data:', error.response?.data || error.message);
+                setSubmitError('Error loading form data');
+                navigate('/');
+            }
         };
-        setFormData(fetchedForm);
-    }, [formId]);
 
-    // Обработчики изменения ответа остаются без изменений
+        fetchFormData();
+    }, [formId, navigate]);
+
     const handleAnswerChange = (index, value) => {
-        const updatedQuestions = [...formData.questions];
-        updatedQuestions[index].answer = value;
-        setFormData({ ...formData, questions: updatedQuestions });
+        setFormData((prev) => ({
+            ...prev,
+            questions: prev.questions.map((q, i) =>
+                i === index ? { ...q, answerValue: value } : q
+            ),
+        }));
     };
 
-    const handleCheckboxChange = (index, option) => {
-        const updatedQuestions = [...formData.questions];
-        const currentAnswers = updatedQuestions[index].answer || [];
-        if (currentAnswers.includes(option)) {
-            updatedQuestions[index].answer = currentAnswers.filter(ans => ans !== option);
-        } else {
-            updatedQuestions[index].answer = [...currentAnswers, option];
-        }
-        setFormData({ ...formData, questions: updatedQuestions });
+    const handleCheckboxChange = (index, option, checked) => {
+        setFormData((prev) => ({
+            ...prev,
+            questions: prev.questions.map((q, i) => {
+                if (i === index) {
+                    let currentAnswers = [];
+                    try {
+                        currentAnswers = q.answerValue ? JSON.parse(q.answerValue) : [];
+                    } catch (e) {
+                        currentAnswers = [];
+                    }
+                    if (checked) {
+                        if (!currentAnswers.includes(option)) {
+                            currentAnswers.push(option);
+                        }
+                    } else {
+                        currentAnswers = currentAnswers.filter((ans) => ans !== option);
+                    }
+                    return { ...q, answerValue: JSON.stringify(currentAnswers) };
+                }
+                return q;
+            }),
+        }));
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log('Updated Form Data:', formData);
+        setSubmitError('');
+        setSubmitSuccess('');
+        try {
+            console.log(formData);
+            await axiosInstance.put(`/filledForms/${formId}`, formData);
+            setSubmitSuccess('Form updated successfully!');
+        } catch (error) {
+            console.error('Error submitting form:', error.response?.data || error.message);
+            setSubmitError('Error submitting the form. Please try again.');
+        }
     };
 
     if (!formData) return <div>Loading...</div>;
@@ -66,22 +80,33 @@ const EditFormPage = () => {
         <Container>
             <Card className="p-4 shadow-sm">
                 <h1 className="mb-4 text-center">Edit Filled Form</h1>
+                {submitError && <Alert variant="danger">{submitError}</Alert>}
+                {submitSuccess && <Alert variant="success">{submitSuccess}</Alert>}
                 <Form onSubmit={handleSubmit}>
                     {formData.questions.map((question, index) => (
-                        <Form.Group key={question.id} className="mb-3">
-                            <Form.Label>{question.text}</Form.Label>
+                        <Form.Group key={question.questionId} className="mb-3">
+                            <Form.Label>{question.questionTextSnapshot}</Form.Label>
 
-                            {question.type === 'single-line' && (
+                            {question.questionType === 'single-line' && (
                                 <Form.Control
                                     type="text"
-                                    value={question.answer}
+                                    value={question.answerValue || ''}
                                     onChange={(e) => handleAnswerChange(index, e.target.value)}
                                 />
                             )}
 
-                            {question.type === 'dropdown' && (
+                            {question.questionType === 'multi-line' && (
+                                <Form.Control
+                                    as="textarea"
+                                    rows={3}
+                                    value={question.answerValue || ''}
+                                    onChange={(e) => handleAnswerChange(index, e.target.value)}
+                                />
+                            )}
+
+                            {question.questionType === 'dropdown' && (
                                 <Form.Select
-                                    value={question.answer}
+                                    value={question.answerValue || ''}
                                     onChange={(e) => handleAnswerChange(index, e.target.value)}
                                 >
                                     <option value="" disabled>
@@ -95,17 +120,29 @@ const EditFormPage = () => {
                                 </Form.Select>
                             )}
 
-                            {question.type === 'checkbox' && (
+                            {question.questionType === 'checkbox' && (
                                 <div>
-                                    {question.options.map((option, i) => (
-                                        <Form.Check
-                                            key={i}
-                                            type="checkbox"
-                                            label={option}
-                                            checked={question.answer.includes(option)}
-                                            onChange={() => handleCheckboxChange(index, option)}
-                                        />
-                                    ))}
+                                    {question.options.map((option, i) => {
+                                        let currentAnswers = [];
+                                        try {
+                                            currentAnswers = question.answerValue
+                                                ? JSON.parse(question.answerValue)
+                                                : [];
+                                        } catch (e) {
+                                            currentAnswers = [];
+                                        }
+                                        return (
+                                            <Form.Check
+                                                key={i}
+                                                type="checkbox"
+                                                label={option}
+                                                checked={currentAnswers.includes(option)}
+                                                onChange={(e) =>
+                                                    handleCheckboxChange(index, option, e.target.checked)
+                                                }
+                                            />
+                                        );
+                                    })}
                                 </div>
                             )}
                         </Form.Group>

@@ -78,15 +78,42 @@ namespace backend.Controllers
                 throw new ValidationException("Invalid input data.");
 
             var user = await _userManager.FindByEmailAsync(model.Email);
-            if (user == null || !await _userManager.CheckPasswordAsync(user, model.Password))
+
+            // Пользователь не найден или null
+            if (user == null)
                 throw new AuthenticationException("Invalid login credentials.");
+
+            // 1. Проверяем, не заблокирован ли пользователь
+            //    (если включена блокировка и достигнут лимит неудачных попыток).
+            if (await _userManager.IsLockedOutAsync(user))
+            {
+                // Можем вернуть более специфичное сообщение: "Ваш аккаунт временно заблокирован" и т.д.
+                throw new AuthenticationException("User account is locked.");
+            }
+
+            // 2. Проверяем пароль
+            if (!await _userManager.CheckPasswordAsync(user, model.Password))
+            {
+                // Пароль неверный → увеличиваем счётчик неудачных попыток
+                await _userManager.AccessFailedAsync(user);
+
+                // Повторно проверим, возможно пользователь теперь
+                // уже достиг лимита неудачных попыток и заблокирован
+                if (await _userManager.IsLockedOutAsync(user))
+                {
+                    throw new AuthenticationException("User account is locked.");
+                }
+
+                throw new AuthenticationException("Invalid login credentials.");
+            }
+
+            await _userManager.ResetAccessFailedCountAsync(user);
 
             var authClaims = new List<Claim>
             {
-                new Claim(ClaimTypes.Name, user.UserName),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+                new Claim(ClaimTypes.NameIdentifier, user.Id),
+                new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
-
 
             var tokenExpiry = model.RememberMe ? TimeSpan.FromDays(7) : TimeSpan.FromHours(1);
 
@@ -100,6 +127,7 @@ namespace backend.Controllers
                 roles = userRoles
             });
         }
+
 
         [HttpGet("me")]
         public async Task<IActionResult> GetCurrentUser()
@@ -119,6 +147,11 @@ namespace backend.Controllers
             if (user == null)
             {
                 return Unauthorized();
+            }
+
+            if (await _userManager.IsLockedOutAsync(user))
+            {
+                throw new AuthenticationException("User was blocked");
             }
 
             var roles = await _userManager.GetRolesAsync(user);
@@ -160,10 +193,8 @@ namespace backend.Controllers
                 authClaims.Add(new Claim(ClaimTypes.Role, role));
             }
 
-            // Генерация токена
             var token = _jwtTokenService.GenerateToken(authClaims, tokenExpiry);
 
-            // Опции cookie
             var cookieOptions = new CookieOptions
             {
                 HttpOnly = true,
@@ -172,7 +203,6 @@ namespace backend.Controllers
                 Expires = DateTime.UtcNow.Add(tokenExpiry)
             };
 
-            // Устанавливаем HTTP‑Only cookie
             Response.Cookies.Append("access_token", token, cookieOptions);
         }
     }

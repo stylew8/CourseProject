@@ -72,7 +72,7 @@ namespace Server.Infrastructure
             }
             else if (exception is ServerInternalException serEx)
             {
-                _logger.LogError($"Validation error: {serEx.Message}");
+                _logger.LogError($"Server error: {serEx.Message}");
                 httpContext.Response.StatusCode = serEx.StatusCode;
 
                 return await _problemDetailsService.TryWriteAsync(new ProblemDetailsContext()
@@ -81,8 +81,40 @@ namespace Server.Infrastructure
                     ProblemDetails = new ProblemDetails()
                     {
                         Status = serEx.StatusCode,
-                        Title = "Validation Error",
+                        Title = "Server exception",
                         Detail = "Server internal error"
+                    }
+                });
+            }
+            else if (exception is NotFoundException notFound)
+            {
+                _logger.LogError($"Not found exception: {notFound.Message}");
+                httpContext.Response.StatusCode = notFound.StatusCode;
+
+                return await _problemDetailsService.TryWriteAsync(new ProblemDetailsContext()
+                {
+                    HttpContext = httpContext,
+                    ProblemDetails = new ProblemDetails()
+                    {
+                        Status = notFound.StatusCode,
+                        Title = "Not found exception",
+                        Detail = "Resource was not found"
+                    }
+                });
+            }
+            else if (exception is ArgumentException argumentException)
+            {
+                _logger.LogError($"Argument error: {argumentException.Message}");
+                httpContext.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+
+                return await _problemDetailsService.TryWriteAsync(new ProblemDetailsContext()
+                {
+                    HttpContext = httpContext,
+                    ProblemDetails = new ProblemDetails()
+                    {
+                        Status = (int)HttpStatusCode.BadRequest,
+                        Title = "Argument exception",
+                        Detail = "Wrong arguments"
                     }
                 });
             }

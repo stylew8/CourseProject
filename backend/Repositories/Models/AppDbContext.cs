@@ -50,6 +50,12 @@ namespace backend.Repositories.Models
                 a.HasKey("Id");
                 a.ToTable("AnswerSnapshots");
             });
+
+            builder.Entity<FilledForm>()
+                .HasOne(f => f.User)
+                .WithMany()
+                .HasForeignKey(f => f.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

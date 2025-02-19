@@ -9,6 +9,11 @@ using Microsoft.IdentityModel.Tokens;
 using Server.Infrastructure;
 using System.Text;
 using System.Text.Json.Serialization;
+using backend.Infrastructure.Authorization;
+using Server.Infrastructure.Middlewares;
+using backend.Repositories.Interfaces;
+using backend.Services.Interfaces;
+
 
 namespace backend
 {
@@ -55,6 +60,12 @@ namespace backend
             services.AddScoped<IUserInformationRepository, UserInformationRepository>();
             services.AddScoped<ITemplatesRepository, TemplatesRepository>();
             services.AddScoped<ITemplatesService, TemplatesService>();
+            services.AddScoped<IFilledFormRepository, FilledFormRepository>();
+            services.AddScoped<IFilledFormService, FilledFormService>();
+            services.AddScoped<IUserDashboardRepository, UserDashboardRepository>();
+            services.AddScoped<IUserDashboardService, UserDashboardService>();
+            services.AddScoped<IAdminRepository, AdminRepository>();
+            services.AddScoped<IAdminService, AdminService>();
 
             services.AddCors(options =>
             {
@@ -97,9 +108,16 @@ namespace backend
                 };
             });
 
-            services.AddAuthorization();
-            services.AddSingleton<IAuthorizationHandler, OwnerOrAdminHandler>();
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy(Policies.OwnerFormOrTemplateOrAdminPolicy, policy =>
+                    policy.Requirements.Add(new OwnerFormOrTemplateOrAdminRequirement()));
+                options.AddPolicy(Policies.OwnerTemplateOrAdminPolicy, policy =>
+                    policy.Requirements.Add(new OwnerTemplateOrAdminRequirement()));
+            });
 
+            services.AddScoped<IAuthorizationHandler, OwnerTemplateOrAdminHandler>();
+            services.AddScoped<IAuthorizationHandler, OwnerFormOrTemplateOrAdminHandler>();
         }
 
         private static void ConfigureMiddleware(WebApplication app)

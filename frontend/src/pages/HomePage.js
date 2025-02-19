@@ -1,15 +1,40 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Row, Col } from 'react-bootstrap';
 import TemplateCard from '../components/TemplateCard';
 import TagCloud from '../components/TagCloud';
+import axiosInstance from '../api/axiosInstance';
 
 const HomePage = () => {
-    const templates = [
-        { id: 1, title: 'Job Application', description: 'Apply for your dream job using this form.' },
-        { id: 2, title: 'Customer Feedback', description: 'Collect feedback from your customers.' }
-    ];
+    const [templates, setTemplates] = useState([]);
+    const [tags, setTags] = useState([]);
+    const [loading, setLoading] = useState(false);
 
-    const tags = ['Education', 'Feedback', 'Survey', 'Job Application'];
+    useEffect(() => {
+        const fetchTemplates = () => {
+            axiosInstance.get('/templates/latest')
+                .then(response => {
+                    console.log('Templates:', response.data);
+                    setTemplates(response.data);
+                })
+                .catch(error => {
+                    console.error('Error fetching templates:', error);
+                })
+                .finally(f => {
+                    setLoading(false);
+                }
+                );
+        };
+
+        setLoading(true);
+        fetchTemplates();
+
+        // Пример тегов (можно запросить с сервера, если нужно)
+        setTags(['Education', 'Feedback', 'Survey', 'Job Application']);
+    }, []);
+
+    if(loading){
+        return <div>Loading....</div>
+    }
 
     return (
         <div>

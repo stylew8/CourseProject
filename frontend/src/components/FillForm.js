@@ -27,16 +27,12 @@ const FillForm = ({
             ))}
         </fieldset>
         {readOnly ? (
-            <p className="text-muted">
-                You are not authorized
-            </p>
+            <p className="text-muted">You are not authorized</p>
         ) : (
             <>
                 {submitError && <Alert variant="danger">{submitError}</Alert>}
                 {submitSuccess && <Alert variant="success">{submitSuccess}</Alert>}
-                <Button variant="primary" type="submit">
-                    Submit
-                </Button>
+                <Button variant="primary" type="submit">Submit</Button>
             </>
         )}
     </Form>

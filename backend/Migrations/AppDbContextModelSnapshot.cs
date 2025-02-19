@@ -241,7 +241,15 @@ namespace backend.Migrations
                     b.Property<int>("TemplateId")
                         .HasColumnType("int");
 
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("TemplateId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("FilledForms");
                 });
@@ -392,6 +400,18 @@ namespace backend.Migrations
 
             modelBuilder.Entity("backend.Repositories.Models.FilledForm", b =>
                 {
+                    b.HasOne("backend.Repositories.Models.Template", "Template")
+                        .WithMany()
+                        .HasForeignKey("TemplateId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.OwnsMany("backend.Repositories.Models.AnswerSnapshot", "Answers", b1 =>
                         {
                             b1.Property<int>("Id")
@@ -408,7 +428,15 @@ namespace backend.Migrations
                             b1.Property<int>("QuestionId")
                                 .HasColumnType("int");
 
+                            b1.Property<string>("QuestionOptionsSnapshot")
+                                .IsRequired()
+                                .HasColumnType("longtext");
+
                             b1.Property<string>("QuestionTextSnapshot")
+                                .IsRequired()
+                                .HasColumnType("longtext");
+
+                            b1.Property<string>("QuestionType")
                                 .IsRequired()
                                 .HasColumnType("longtext");
 
@@ -416,13 +444,27 @@ namespace backend.Migrations
 
                             b1.HasIndex("FilledFormId");
 
+                            b1.HasIndex("QuestionId");
+
                             b1.ToTable("AnswerSnapshots", (string)null);
 
                             b1.WithOwner()
                                 .HasForeignKey("FilledFormId");
+
+                            b1.HasOne("backend.Repositories.Models.Question", "Question")
+                                .WithMany()
+                                .HasForeignKey("QuestionId")
+                                .OnDelete(DeleteBehavior.Cascade)
+                                .IsRequired();
+
+                            b1.Navigation("Question");
                         });
 
                     b.Navigation("Answers");
+
+                    b.Navigation("Template");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("backend.Repositories.Models.Option", b =>

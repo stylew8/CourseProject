@@ -2,6 +2,6 @@
 
 namespace Server.Infrastructure.Middlewares;
 
-public class OwnerOrAdminRequirement : IAuthorizationRequirement
+public class OwnerTemplateOrAdminRequirement : IAuthorizationRequirement
 {
 }

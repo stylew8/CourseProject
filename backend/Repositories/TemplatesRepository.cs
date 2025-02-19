@@ -1,4 +1,6 @@
-﻿using backend.Repositories.Models;
+﻿using backend.Repositories.Interfaces;
+using backend.Repositories.Models;
+using K4os.Hash.xxHash;
 using Microsoft.EntityFrameworkCore;
 
 namespace backend.Repositories;
@@ -19,7 +21,7 @@ public class TemplatesRepository : ITemplatesRepository
         return template;
     }
 
-    public async Task<Template> GetTemplateByIdFullAsync(int id)
+    public async Task<Template?> GetTemplateByIdFullAsync(int id)
     {
         return await _context.Templates
             .Include(t => t.Questions)
@@ -56,10 +58,11 @@ public class TemplatesRepository : ITemplatesRepository
         return template;
     }
 
-    public async Task<Template> GetTemplateWithQuestionsAsync(int templateId)
+    public async Task<Template?> GetTemplateWithQuestionsAsync(int templateId)
     {
         return await _context.Templates
             .Include(t => t.Questions)
+            .ThenInclude(x=>x.Options)
             .FirstOrDefaultAsync(t => t.Id == templateId);
     }
 
@@ -67,5 +70,23 @@ public class TemplatesRepository : ITemplatesRepository
     {
         _context.FilledForms.Add(filledForm);
         await _context.SaveChangesAsync();
+    }
+
+    public async Task<List<Template>> GetLatestTemplatesAsync()
+    {
+        return await _context.Templates
+            .Include(t => t.Questions) 
+            .OrderByDescending(t => t.Id) 
+            .Take(10)
+            .ToListAsync();
+    }
+
+    public async Task<List<FilledForm>> GetFilledFormsAsync(int templateId)
+    {
+        return await _context.FilledForms
+            .Where(f => f.TemplateId == templateId)
+            .Include(i=>i.User)
+            .Include(f => f.Answers) 
+            .ToListAsync();
     }
 }

@@ -1,51 +1,59 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Container, Tabs, Tab } from 'react-bootstrap';
+import { Container, Tabs, Tab, Card, Alert } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
 import axiosInstance from '../api/axiosInstance';
-import { AuthContext } from '../context/AuthContext'; // путь может отличаться
+import { AuthContext } from '../context/AuthContext';
 
 import GeneralSettings from '../components/GeneralSettings';
 import QuestionsList from '../components/QuestionsList';
 import FilledFormsTable from '../components/FilledFormsTable';
 import AggregationResults from '../components/AggregationResults';
 import FillForm from '../components/FillForm';
+import { Admin } from '../api/roles';
 
 const TemplatePage = () => {
     const { id } = useParams();
-    const { user, roles, isAuthenticated } = useContext(AuthContext); // получаем статус авторизации
+    const { user, roles, isAuthenticated } = useContext(AuthContext);
     const [template, setTemplate] = useState(null);
     const [filledForms, setFilledForms] = useState([]);
-    const [answers, setAnswers] = useState({});
+    const [aggregationResults, setAggregationResults] = useState([]);
+    const [loading, setLoading] = useState(true);
     const [submitError, setSubmitError] = useState('');
     const [submitSuccess, setSubmitSuccess] = useState('');
+    const [canViewResults, setCanViewResults] = useState(false);
+    const [answers, setAnswers] = useState({});
 
     useEffect(() => {
-        const fetchTemplate = async () => {
+        const fetchData = async () => {
             try {
-                const response = await axiosInstance.get(`/templates/public/${id}`);
-                setTemplate(response.data);
+                const responseTemplate = await axiosInstance.get(`/templates/public/${id}`);
+                setTemplate(responseTemplate.data);
+                
+                const responseFilledForms = await axiosInstance.get(`/templates/${id}/filledForms`);
+                setFilledForms(responseFilledForms.data);
+                console.log(responseFilledForms.data);
+
+                const responseResults = await axiosInstance.get(`/templates/${id}/results`);
+                setAggregationResults(responseResults.data);
+
+                setCanViewResults(user && (roles.includes(Admin) || user.id === responseTemplate.data.creatorId));
+
+                const initialAnswers = {};
+                responseTemplate.data.questions.forEach(q => {
+                    initialAnswers[q.id] = q.type === 'checkbox' ? [] : '';
+                });
+                setAnswers(initialAnswers);
             } catch (error) {
-                console.error('Error fetching template:', error.response?.data || error.message);
+                console.error('Error fetching data:', error.response?.data || error.message);
+            } finally {
+                setLoading(false);
             }
         };
+        fetchData();
+    }, [id, user, roles]);
 
-        const fetchFilledForms = async () => {
-            try {
-                const response = await axiosInstance.get(`/templates/${id}/filledForms`);
-                setFilledForms(response.data);
-            } catch (error) {
-                console.error('Error fetching filled forms:', error.response?.data || error.message);
-            }
-        };
-
-        fetchTemplate();
-        fetchFilledForms();
-    }, [id]);
-
-    if (!template) return <div>Loading...</div>;
-
-    // Вкладки "Results" и "Aggregation" доступны только для админа или создателя шаблона
-    const canViewResults = user && (roles.includes('admin') || user.id === template.creatorId);
+    if (loading) return <div>Loading...</div>;
+    if (!template) return <div>Template not found.</div>;
 
     const handleAnswerChange = (question, value) => {
         setAnswers(prev => ({ ...prev, [question.id]: value }));
@@ -54,11 +62,9 @@ const TemplatePage = () => {
     const handleCheckboxChange = (question, optionValue, checked) => {
         setAnswers(prev => {
             const prevArr = Array.isArray(prev[question.id]) ? prev[question.id] : [];
-            if (checked) {
-                return { ...prev, [question.id]: [...prevArr, optionValue] };
-            } else {
-                return { ...prev, [question.id]: prevArr.filter(val => val !== optionValue) };
-            }
+            return checked
+                ? { ...prev, [question.id]: [...prevArr, optionValue] }
+                : { ...prev, [question.id]: prevArr.filter(val => val !== optionValue) };
         });
     };
 
@@ -68,15 +74,13 @@ const TemplatePage = () => {
         setSubmitSuccess('');
         try {
             const payload = { answers };
-            console.log("Payload to submit:", payload);
-            const response = await axiosInstance.post(`/templates?templateId=${id}`, payload);
+            await axiosInstance.post(`/templates?templateId=${id}`, payload);
             setSubmitSuccess('Form submitted successfully!');
         } catch (error) {
             console.error('Error submitting form:', error.response?.data || error.message);
             setSubmitError('Error submitting the form. Please try again.');
         }
     };
-    
 
     return (
         <Container className="mt-4">
@@ -89,18 +93,24 @@ const TemplatePage = () => {
                 <Tab eventKey="questions" title="Questions">
                     <QuestionsList questions={template.questions} />
                 </Tab>
-                {canViewResults && (
+                {canViewResults ? (
                     <Tab eventKey="results" title="Results">
-                        <FilledFormsTable filledForms={filledForms} />
+                        <Card className="mb-3">
+                            <Card.Header>Results</Card.Header>
+                            <Card.Body>
+                                <h3>Filled Forms</h3>
+                                <FilledFormsTable filledForms={filledForms} />
+                                <h3>Aggregation Results</h3>
+                                <AggregationResults aggregationResults={aggregationResults} />
+                            </Card.Body>
+                        </Card>
                     </Tab>
-                )}
-                {canViewResults && (
-                    <Tab eventKey="aggregation" title="Aggregation">
-                        <AggregationResults />
+                ) : (
+                    <Tab eventKey="results" title="Results">
+                        <Alert variant="warning">You do not have permission to view the results.</Alert>
                     </Tab>
                 )}
             </Tabs>
-
             <h2>Fill Out This Form</h2>
             <FillForm
                 questions={template.questions}

@@ -1,7 +1,7 @@
 ﻿using backend.Repositories.Models;
 using backend.ViewModels.DTOs;
 
-namespace backend.Services;
+namespace backend.Services.Interfaces;
 
 public interface ITemplatesService
 {
@@ -9,5 +9,8 @@ public interface ITemplatesService
     Task<Template> GetTemplateFullAsync(int id);
     Task<Template> UpdateTemplateAsync(int id, TemplateDto dto);
     Task<Template> GetTemplatePublicAsync(int id);
-    Task<int> SubmitFormAsync(int templateId, SubmitFormDto dto);
+    Task<int> SubmitFormAsync(int templateId, SubmitFormDto dto, string userId);
+    Task<List<Template>> GetLatestTemplatesAsync();
+    Task<AggregationResultsDto> GetTemplateResultsAsync(int templateId);
+    Task<List<FilledFormDto>> GetFilledFormsAsync(int templateId);
 }

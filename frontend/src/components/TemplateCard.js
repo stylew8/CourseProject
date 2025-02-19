@@ -6,7 +6,9 @@ const TemplateCard = ({ template }) => (
         <Card.Body>
             <Card.Title>{template.title}</Card.Title>
             <Card.Text>{template.description}</Card.Text>
-            <Button variant="primary" href={`/template/${template.id}`}>View Template</Button>
+            <Button variant="primary" href={`/template/${template.id}`}>
+                View Template
+            </Button>
         </Card.Body>
     </Card>
 );

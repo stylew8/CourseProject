@@ -1,8 +1,11 @@
 ﻿using backend.Repositories.Models;
-using backend.Repositories;
 using backend.ViewModels.DTOs;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Linq;
 using Server.Infrastructure.Exceptions;
+using System;
+using backend.Repositories.Interfaces;
+using backend.Services.Interfaces;
 
 namespace backend.Services;
 
@@ -75,7 +78,7 @@ public class TemplatesService : ITemplatesService
         return template;
     }
 
-    public async Task<int> SubmitFormAsync(int templateId, SubmitFormDto dto)
+    public async Task<int> SubmitFormAsync(int templateId, SubmitFormDto dto, string userId)
     {
         var template = await _templatesRepository.GetTemplateWithQuestionsAsync(templateId);
         if (template == null)
@@ -85,6 +88,7 @@ public class TemplatesService : ITemplatesService
         {
             TemplateId = templateId,
             SubmittedAt = DateTime.UtcNow,
+            UserId = userId
         };
 
         foreach (var kvp in dto.Answers)
@@ -108,15 +112,128 @@ public class TemplatesService : ITemplatesService
                 answerValue = kvp.Value?.ToString();
             }
 
+            var optionsDto = question.Options.Select(x => new { x.Order, x.Value });
+
             filledForm.Answers.Add(new AnswerSnapshot
             {
                 QuestionId = questionId,
                 QuestionTextSnapshot = question.Text,
-                AnswerValue = answerValue
+                AnswerValue = answerValue,
+                QuestionType = question.Type,
+                QuestionOptionsSnapshot = JArray.FromObject(optionsDto).ToString()
             });
         }
 
         await _templatesRepository.AddFilledFormAsync(filledForm);
         return filledForm.Id;
+    }
+
+    public async Task<List<Template>> GetLatestTemplatesAsync()
+    {
+        return await _templatesRepository.GetLatestTemplatesAsync();
+    }
+
+    public async Task<List<FilledFormDto>> GetFilledFormsAsync(int templateId)
+    {
+        var filledForms = await _templatesRepository.GetFilledFormsAsync(templateId);
+
+        var filledFormsDtos = filledForms.Select(form => new FilledFormDto
+        {
+            Id = form.Id,
+            UserName = form.User.UserName ?? "Unknown user",
+            Answers = form.Answers.Select(answer => new AnswerDto
+            {
+                QuestionId = answer.QuestionId,
+                QuestionTextSnapshot = answer.QuestionTextSnapshot,
+                AnswerValue = answer.AnswerValue
+            }).ToList()
+        }).ToList();
+
+        return filledFormsDtos;
+    }
+
+    public async Task<AggregationResultsDto> GetTemplateResultsAsync(int templateId)
+    {
+        var filledForms = await _templatesRepository.GetFilledFormsAsync(templateId);
+        var aggregationResults = new List<AggregationResultDto>();
+
+        var answerFrequency = GetAnswerFrequency(filledForms);
+
+        aggregationResults = GetAggregationResults(filledForms);
+
+        var mostFrequentAnswers = GetMostFrequentAnswers(answerFrequency);
+
+        var totalAnswers = filledForms.Sum(form => form.Answers.Count);
+
+        return new AggregationResultsDto
+        {
+            AggregationResults = aggregationResults,
+            MostFrequentAnswers = mostFrequentAnswers,
+            TotalAnswers = totalAnswers
+        };
+    }
+
+    private Dictionary<string, int> GetAnswerFrequency(List<FilledForm> filledForms)
+    {
+        var frequency = new Dictionary<string, int>();
+
+        foreach (var form in filledForms)
+        {
+            foreach (var answer in form.Answers)
+            {
+                var key = $"{answer.QuestionId}-{answer.AnswerValue}";
+                if (frequency.ContainsKey(key))
+                {
+                    frequency[key]++;
+                }
+                else
+                {
+                    frequency[key] = 1;
+                }
+            }
+        }
+
+        return frequency;
+    }
+
+    private List<AggregationResultDto> GetAggregationResults(List<FilledForm> filledForms)
+    {
+        var results = new List<AggregationResultDto>();
+
+        foreach (var form in filledForms)
+        {
+            foreach (var answer in form.Answers)
+            {
+                var existingResult = results.FirstOrDefault(r => r.QuestionId == answer.QuestionId && r.AnswerValue == answer.AnswerValue);
+                if (existingResult != null)
+                {
+                    existingResult.Count++;
+                }
+                else
+                {
+                    results.Add(new AggregationResultDto
+                    {
+                        QuestionId = answer.QuestionId,
+                        AnswerValue = answer.AnswerValue,
+                        Count = 1
+                    });
+                }
+            }
+        }
+
+        return results;
+    }
+
+    private List<AggregationResultDto> GetMostFrequentAnswers(Dictionary<string, int> answerFrequency)
+    {
+        return answerFrequency
+            .Select(kvp => new AggregationResultDto
+            {
+                QuestionId = int.Parse(kvp.Key.Split('-')[0]),
+                AnswerValue = kvp.Key.Split('-')[1],
+                Count = kvp.Value
+            })
+            .OrderByDescending(x => x.Count)
+            .ToList();
     }
 }
