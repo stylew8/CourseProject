@@ -25,6 +25,7 @@ const UserDashboard = () => {
             }
         };
         fetchData();
+
     }, []);
 
     if (loading) return <div>Loading...</div>;
@@ -40,7 +41,7 @@ const UserDashboard = () => {
                             <p>No templates found.</p>
                         ) : (
                             templates.map((template, index) => (
-                                <TemplateCard key={`${template.id}-${index}`} template={template} />
+                                <TemplateCard key={`${template.id}-${index}`} template={template} isDashboard={true} />
                             ))
                         )}
                     </Tab>,

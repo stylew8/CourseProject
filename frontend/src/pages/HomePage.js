@@ -13,7 +13,6 @@ const HomePage = () => {
         const fetchTemplates = () => {
             axiosInstance.get('/templates/latest')
                 .then(response => {
-                    console.log('Templates:', response.data);
                     setTemplates(response.data);
                 })
                 .catch(error => {
@@ -28,7 +27,6 @@ const HomePage = () => {
         setLoading(true);
         fetchTemplates();
 
-        // Пример тегов (можно запросить с сервера, если нужно)
         setTags(['Education', 'Feedback', 'Survey', 'Job Application']);
     }, []);
 

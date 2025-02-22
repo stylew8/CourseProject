@@ -5,24 +5,24 @@
 namespace backend.Migrations
 {
     /// <inheritdoc />
-    public partial class optionSnapshot : Migration
+    public partial class accessType : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<string>(
-                name: "QuestionOptionsSnapshot",
-                table: "AnswerSnapshots",
+                name: "AccessType",
+                table: "Templates",
                 type: "longtext",
-                nullable: false);
+                nullable: true);
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "QuestionOptionsSnapshot",
-                table: "AnswerSnapshots");
+                name: "AccessType",
+                table: "Templates");
         }
     }
 }

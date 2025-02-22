@@ -6,11 +6,24 @@ export const getTemplate = async (templateId) => {
 };
 
 export const updateTemplate = async (templateId, updatedTemplate) => {
-    const response = await axiosInstance.put(`/templates/${templateId}`, updatedTemplate);
+    const response = await axiosInstance.put(`/templates/${templateId}`, updatedTemplate, {
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        }
+    });
     return response.data;
 };
 
-export const createTemplate = async (data) => {
-    const response = await axiosInstance.post('/templates/create', data);
+export const createTemplate = async (formData) => {
+    const response = await axiosInstance.post('/templates/create', formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        }
+    });
+    return response.data;
+};
+
+export const deleteTemplate = async (templateId) => {
+    const response = await axiosInstance.delete(`/templates/${templateId}`);
     return response.data;
 };

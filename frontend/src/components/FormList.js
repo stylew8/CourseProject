@@ -1,6 +1,7 @@
 import React from 'react';
-import { ListGroup, Button } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { ListGroup } from 'react-bootstrap';
+// import { Button } from 'react-bootstrap';
+// import { Link } from 'react-router-dom';
 
 const FormList = ({ forms }) => {
     return (
@@ -13,11 +14,11 @@ const FormList = ({ forms }) => {
                     <div>
                         <strong>{form.templateName}</strong> - {new Date(form.submittedAt).toLocaleDateString()}
                     </div>
-                    <Link to={`/edit-form/${form.id}`}>
+                    {/* <Link to={`/edit-form/${form.id}`}>
                         <Button variant="outline-primary" size="sm">
                             Edit
                         </Button>
-                    </Link>
+                    </Link> */}
                 </ListGroup.Item>
             ))}
         </ListGroup>

@@ -23,6 +23,7 @@ namespace backend.Services
             var templates = await _repository.GetUserTemplatesAsync(userId);
             return templates.Select(t => new TemplateDto
             {
+                Id = t.Id,
                 Title = t.Title,
                 Description = t.Description,
                 Questions = t.Questions.Select(q => new QuestionDto
@@ -40,7 +41,7 @@ namespace backend.Services
                         Value = o.Value
                     }).ToList()
                 }).ToList()
-            }).ToList();
+            }).OrderByDescending(x=>x.Id).ToList();
         }
 
         public async Task<List<DashboardFilledFormDto>> GetUserFilledFormsForDashboardAsync(string userId)

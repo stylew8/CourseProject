@@ -16,6 +16,11 @@ namespace backend.Repositories.Models
         public DbSet<Question> Questions { get; set; }
         public DbSet<Option> Options { get; set; }
         public DbSet<FilledForm> FilledForms { get; set; }
+        public DbSet<Topic> Topics { get; set; }
+        public DbSet<Tag> Tags { get; set; }
+        public DbSet<TemplateTag> TemplateTags { get; set; }
+        public DbSet<TemplateUser> TemplateUsers { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

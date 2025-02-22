@@ -4,9 +4,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Server.Infrastructure.Exceptions;
 using System.Security.Claims;
+using System.Text.Json;
 using Server.Infrastructure.Middlewares;
 using backend.ViewModels.DTOs;
 using backend.Services.Interfaces;
+using backend.Services;
 
 namespace backend.Controllers
 {
@@ -14,31 +16,58 @@ namespace backend.Controllers
     [Route("[controller]")]
     public class TemplatesController : ControllerBase
     {
-        private readonly ITemplatesService _templatesService;
-        private readonly IAuthorizationService _authorizationService;
+        private readonly ITemplatesService templatesService;
+        private readonly IAuthorizationService authorizationService;
+        private readonly IS3Service s3Service;
 
         public TemplatesController(
             ITemplatesService templatesService,
-            IAuthorizationService authorizationService)
+            IAuthorizationService authorizationService, IS3Service s3Service)
         {
-            _templatesService = templatesService;
-            _authorizationService = authorizationService;
+            this.templatesService = templatesService;
+            this.authorizationService = authorizationService;
+            this.s3Service = s3Service;
         }
 
         [HttpPost("create")]
         [Authorize]
-        public async Task<IActionResult> CreateTemplate([FromBody] TemplateDto dto)
+        public async Task<IActionResult> CreateTemplate([FromForm] TemplateDto dto)
         {
             var creatorId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var template = await _templatesService.CreateTemplateAsync(dto, creatorId);
+            string photoUrl = null;
+
+            if (dto.Photo != null)
+            {
+                photoUrl = await s3Service.UploadFileAsync(dto.Photo);
+            }
+
+            var template = await templatesService.CreateTemplateAsync(dto, creatorId, photoUrl);
             return Ok(template);
         }
+
+
+        [HttpPut("{id}")]
+        [Authorize(Policy = Policies.OwnerTemplateOrAdminPolicy)]
+        public async Task<IActionResult> UpdateTemplate(int id, [FromForm] TemplateDto dto)
+        {
+            string photoUrl = null;
+
+            if (dto.Photo != null)
+            {
+                photoUrl = await s3Service.UploadFileAsync(dto.Photo);
+            }
+
+            var updated = await templatesService.UpdateTemplateAsync(id, dto, photoUrl);
+            return Ok(updated);
+        }
+
+
 
         [HttpGet("public/{id}")]
         [AllowAnonymous]
         public async Task<IActionResult> GetTemplatePublic(int id)
         {
-            var template = await _templatesService.GetTemplateFullAsync(id);
+            var template = await templatesService.GetTemplateFullAsync(id);
             if (template == null)
                 return NotFound();
 
@@ -49,18 +78,11 @@ namespace backend.Controllers
         [Authorize(Policy = Policies.OwnerTemplateOrAdminPolicy)]
         public async Task<IActionResult> GetTemplatePrivate(int id)
         {
-            var template = await _templatesService.GetTemplateFullAsync(id);
+            var template = await templatesService.GetTemplateFullAsync(id);
 
             return Ok(template);
         }
 
-        [HttpPut("{id}")]
-        [Authorize(Policy = Policies.OwnerTemplateOrAdminPolicy)]
-        public async Task<IActionResult> UpdateTemplate(int id, [FromBody] TemplateDto dto)
-        {
-            var updated = await _templatesService.UpdateTemplateAsync(id, dto);
-            return Ok(updated);
-        }
 
         [HttpPost]
         [Authorize]
@@ -68,14 +90,14 @@ namespace backend.Controllers
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            var filledFormId = await _templatesService.SubmitFormAsync(templateId, dto, userId);
+            var filledFormId = await templatesService.SubmitFormAsync(templateId, dto, userId);
             return Ok(new { FilledFormId = filledFormId });
         }
 
         [HttpGet("latest")]
         public async Task<IActionResult> GetLatestTemplates()
         {
-            var templates = await _templatesService.GetLatestTemplatesAsync();
+            var templates = await templatesService.GetLatestTemplatesAsync();
             return Ok(templates);
         }
 
@@ -83,7 +105,7 @@ namespace backend.Controllers
         [Authorize(Policy = Policies.OwnerTemplateOrAdminPolicy)]
         public async Task<IActionResult> GetFilledForms(int id)
         {
-            var filledForms = await _templatesService.GetFilledFormsAsync(id);
+            var filledForms = await templatesService.GetFilledFormsAsync(id);
             return Ok(filledForms);
         }
 
@@ -91,8 +113,37 @@ namespace backend.Controllers
         [Authorize(Policy = Policies.OwnerTemplateOrAdminPolicy)]
         public async Task<IActionResult> GetTemplateResults(int id)
         {
-            var results = await _templatesService.GetTemplateResultsAsync(id);
+            var results = await templatesService.GetTemplateResultsAsync(id);
             return Ok(results);
         }
+
+        [HttpDelete("{id}")]
+        [Authorize(Policy = Policies.OwnerTemplateOrAdminPolicy)]
+        public async Task<IActionResult> DeleteTemplate(string id)
+        {
+            var template = await templatesService.GetTemplateByIdAsync(id);
+            if (template == null)
+            {
+                return NotFound("Template not found.");
+            }
+
+            if (!string.IsNullOrEmpty(template.PhotoUrl))
+            {
+                var bucketUrlPrefix = $"https://{s3Service.BucketName}.s3.amazonaws.com/";
+                if (template.PhotoUrl.StartsWith(bucketUrlPrefix))
+                {
+                    var key = template.PhotoUrl.Substring(bucketUrlPrefix.Length);
+
+                        await s3Service.DeleteFileAsync(key);
+                    
+
+                }
+            }
+
+            await templatesService.DeleteTemplateAsync(id);
+
+            return NoContent();
+        }
+
     }
 }

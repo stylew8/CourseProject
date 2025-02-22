@@ -4,9 +4,8 @@ using System.Text.Json.Serialization;
 
 namespace backend.Repositories.Models
 {
-    public class Option
+    public class Option : Entity
     {
-        public int Id { get; set; }
         public int Order { get; set; }
         public string Value { get; set; }
 

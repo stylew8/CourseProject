@@ -45,6 +45,7 @@ public class TemplatesRepository : ITemplatesRepository
             Order = q.Order,
             Type = q.Type,
             Text = q.Text,
+
             Description = q.Description,
             ShowInTable = q.ShowInTable,
             Options = q.Options.Select(o => new Option

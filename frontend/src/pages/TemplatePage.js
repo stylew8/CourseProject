@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Container, Tabs, Tab, Card, Alert } from 'react-bootstrap';
+import { Container, Tabs, Tab, Card } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
 import axiosInstance from '../api/axiosInstance';
 import { AuthContext } from '../context/AuthContext';
@@ -28,7 +28,7 @@ const TemplatePage = () => {
             try {
                 const responseTemplate = await axiosInstance.get(`/templates/public/${id}`);
                 setTemplate(responseTemplate.data);
-                
+
                 const responseFilledForms = await axiosInstance.get(`/templates/${id}/filledForms`);
                 setFilledForms(responseFilledForms.data);
                 console.log(responseFilledForms.data);
@@ -93,7 +93,7 @@ const TemplatePage = () => {
                 <Tab eventKey="questions" title="Questions">
                     <QuestionsList questions={template.questions} />
                 </Tab>
-                {canViewResults ? (
+                {canViewResults && (
                     <Tab eventKey="results" title="Results">
                         <Card className="mb-3">
                             <Card.Header>Results</Card.Header>
@@ -104,10 +104,6 @@ const TemplatePage = () => {
                                 <AggregationResults aggregationResults={aggregationResults} />
                             </Card.Body>
                         </Card>
-                    </Tab>
-                ) : (
-                    <Tab eventKey="results" title="Results">
-                        <Alert variant="warning">You do not have permission to view the results.</Alert>
                     </Tab>
                 )}
             </Tabs>

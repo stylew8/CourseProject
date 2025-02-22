@@ -51,11 +51,13 @@ const QuestionCard = ({
             <Card.Body>
                 <Row className="align-items-center mb-3">
                     <Col md={7}>
+                        <label className='text-danger'>*</label>
                         <Form.Control
                             type="text"
                             placeholder="Enter your question title"
                             value={question.text}
                             onChange={(e) => handleQuestionChange(index, 'text', e.target.value)}
+                            required
                         />
                     </Col>
                     <Col md={4}>
@@ -109,13 +111,14 @@ const QuestionCard = ({
                                         placeholder={`Option ${optionIndex + 1}`}
                                         value={option.value}
                                         onChange={(e) => handleOptionChange(index, optionIndex, e.target.value)}
+                                        required
                                     />
                                     <Button
                                         size="sm"
                                         variant="outline-danger"
                                         onClick={() => removeOption(optionIndex)}
                                     >
-                                        Remove
+                                        X
                                     </Button>
                                 </InputGroup>
                             </OptionItem>

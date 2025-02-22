@@ -1,150 +1,169 @@
-import React, { useState, useEffect } from 'react';
-import { Container, Form, Button, Card } from 'react-bootstrap';
-import DraggableQuestion from '../components/DraggableQuestion';
-import { DndProvider } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
+import React, { useEffect, useState } from 'react';
+import { Container, Card } from 'react-bootstrap';
 import { useParams, useNavigate } from 'react-router-dom';
+import { useQuestions } from '../hooks/useQuestions';
+import TemplateForm from '../components/TemplateForm';
 import { getTemplate, updateTemplate } from '../api/templateService';
+import { notifyError } from '../utils/notification';
+import { checkbox, dropdown } from '../utils/questionsTypes';
+import { topicOptions, tagOptions, userOptions } from '../config/options';
 
 const EditTemplatePage = () => {
     const { templateId } = useParams();
     const navigate = useNavigate();
-    const [template, setTemplate] = useState(null);
-    const [questions, setQuestions] = useState([]);
+
+    const [isPhotoDeleted, setIsPhotoDeleted] = useState(false);
+
+    const [formData, setFormData] = useState({
+        title: '',
+        description: '',
+        topic: '',
+        customTopic: '',
+        tags: [],
+        accessType: 'public',
+        selectedUsers: [],
+        photoUrl: null,
+        photo: null
+    });
+
+    const {
+        questions,
+        setQuestions,
+        addQuestion,
+        removeQuestion,
+        moveQuestion,
+        handleQuestionChange,
+        handleOptionChange,
+        addOptionToQuestion,
+    } = useQuestions([]);
 
     useEffect(() => {
-        const fetchTemplate = async () => {
+        const loadTemplate = async () => {
             try {
                 const data = await getTemplate(templateId);
-                setTemplate(data);
-                const sortedQuestions = data.questions.sort((a, b) => a.order - b.order);
-                setQuestions(sortedQuestions);
+                setFormData({
+                    ...data,
+                    photoUrl: data.photoUrl
+                });
+                setQuestions(data.questions);
+                setIsPhotoDeleted(!data.photoUrl);
             } catch (error) {
-                console.error('Error fetching template:', error.response?.data || error.message);
+                console.error('Loading failed:', error);
             }
         };
-        fetchTemplate();
-    }, [templateId]);
-
-    const handleTemplateChange = (key, value) => {
-        setTemplate({ ...template, [key]: value });
-    };
-
-    const handleQuestionChange = (index, key, value) => {
-        const updated = [...questions];
-        updated[index][key] = value;
-        setQuestions(updated);
-    };
-
-    const handleOptionsChange = (questionIndex, newOptions) => {
-        const updatedQuestions = [...questions];
-        updatedQuestions[questionIndex].options = newOptions;
-        setQuestions(updatedQuestions);
-    };
-
-    const addOptionToQuestion = (questionIndex) => {
-        const updatedQuestions = [...questions];
-        const newOption = {
-            id: Date.now(),
-            order: updatedQuestions[questionIndex].options.length,
-            value: ""
-        };
-        updatedQuestions[questionIndex].options.push(newOption);
-        setQuestions(updatedQuestions);
-    };
-
-    const handleOptionChange = (questionIndex, optionIndex, value) => {
-        const updatedQuestions = [...questions];
-        updatedQuestions[questionIndex].options[optionIndex].value = value;
-        setQuestions(updatedQuestions);
-    };
-
-    const addQuestion = () => {
-        const newQuestion = {
-            id: Date.now(),
-            order: questions.length,
-            type: 'single-line',
-            text: '',
-            description: '',
-            showInTable: false,
-            options: []
-        };
-        setQuestions([...questions, newQuestion]);
-    };
-
-    const removeQuestion = (index) => {
-        const updated = questions.filter((_, i) => i !== index);
-        updated.forEach((q, i) => { q.order = i; });
-        setQuestions(updated);
-    };
-
-    const moveQuestion = (dragIndex, hoverIndex) => {
-        const updated = [...questions];
-        const [movedQuestion] = updated.splice(dragIndex, 1);
-        updated.splice(hoverIndex, 0, movedQuestion);
-        updated.forEach((q, i) => { q.order = i; });
-        setQuestions(updated);
-    };
+        loadTemplate();
+    }, [templateId, setQuestions]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const updatedTemplate = { ...template, questions };
+
+        const cleanedQuestions = questions.map(({
+            order,
+            type,
+            text,
+            description,
+            showInTable,
+            options
+        }) => ({
+            order,
+            type,
+            text,
+            description,
+            showInTable,
+            options: options?.map(({ order, value }) => ({ order, value })) || []
+        }));
+
+        if (cleanedQuestions.length === 0) {
+            notifyError("Please add at least one question.");
+            return;
+        }
+
+        const optionQuestions = cleanedQuestions.filter(q =>
+            q.type === checkbox || q.type === dropdown
+        );
+
+        if (optionQuestions.some(q => q.options.length < 2)) {
+            notifyError("Questions with options must have at least 2 choices");
+            return;
+        }
+
+        if (!formData.topic) {
+            notifyError("Please select a topic");
+            return;
+        }
+
+        let finalTopic = formData.topic;
+        if (formData.topic === 'Other') {
+            if (!formData.customTopic.trim()) {
+                notifyError("Please enter custom topic name");
+                return;
+            }
+            finalTopic = formData.customTopic;
+        }
+
+        const formPayload = new FormData();
+        formPayload.append('title', formData.title);
+        formPayload.append('description', formData.description);
+        formPayload.append('topic', finalTopic);
+        formPayload.append('accessType', formData.accessType);
+
+        if (formData.tags.length > 0) {
+            formPayload.append('tagIds', JSON.stringify(
+                formData.tags.map(tag => tag.value)
+            ));
+        }
+
+        if (formData.accessType === 'private' && formData.selectedUsers.length > 0) {
+            formPayload.append('allowedUserIds', JSON.stringify(
+                formData.selectedUsers.map(user => user.value)
+            ));
+        }
+
+        if (isPhotoDeleted) {
+            formPayload.append('photo', '');
+        } else if (formData.photo) {
+            formPayload.append('photo', formData.photo);
+        }
+
+        formPayload.append('questions', JSON.stringify(cleanedQuestions));
+
         try {
-            const result = await updateTemplate(template.id, updatedTemplate);
-            console.log('Template updated:', result);
-            navigate(`/template/${template.id}`);
+            await updateTemplate(templateId, formPayload);
+            navigate(`/template/${templateId}`);
         } catch (error) {
-            console.error('Error updating template:', error.response?.data || error.message);
+            console.error('Template update error:', error);
+            notifyError(error.response?.data?.message || 'Failed to update template');
         }
     };
 
-    if (!template) return <div>Loading...</div>;
+    const handleDeletePhoto = () => {
+        setFormData({ ...formData, photoUrl: null, photo: null });
+        setIsPhotoDeleted(true);
+    };
 
     return (
-        <Container>
-            <Card className="p-4 shadow-sm">
-                <h1 className="mb-4 text-center">Edit Template</h1>
-                <Form onSubmit={handleSubmit}>
-                    <Form.Group className="mb-3">
-                        <Form.Label>Template Title</Form.Label>
-                        <Form.Control
-                            type="text"
-                            value={template.title}
-                            onChange={(e) => handleTemplateChange('title', e.target.value)}
-                        />
-                    </Form.Group>
-                    <Form.Group className="mb-3">
-                        <Form.Label>Description</Form.Label>
-                        <Form.Control
-                            as="textarea"
-                            rows={3}
-                            value={template.description}
-                            onChange={(e) => handleTemplateChange('description', e.target.value)}
-                        />
-                    </Form.Group>
-                    <h3 className="mb-3">Questions</h3>
-                    <DndProvider backend={HTML5Backend}>
-                        {questions.map((q, index) => (
-                            <DraggableQuestion
-                                key={q.id}
-                                index={index}
-                                question={q}
-                                moveQuestion={moveQuestion}
-                                handleQuestionChange={handleQuestionChange}
-                                removeQuestion={removeQuestion}
-                                updateOptions={handleOptionsChange}
-                                addOptionToQuestion={addOptionToQuestion}
-                                handleOptionChange={handleOptionChange}
-                            />
-                        ))}
-                    </DndProvider>
-                    <Button variant="outline-primary" onClick={addQuestion} className="mb-3">
-                        Add Question
-                    </Button>
-                    <Button type="submit" variant="primary">
-                        Save Changes
-                    </Button>
-                </Form>
+        <Container className="py-4">
+            <Card>
+                <Card.Body>
+                    <h1 className="text-center mb-4">Edit Template</h1>
+                    <TemplateForm
+                        mode="edit"
+                        formData={formData}
+                        setFormData={setFormData}
+                        questions={questions}
+                        onQuestionAdd={addQuestion}
+                        onQuestionRemove={removeQuestion}
+                        onQuestionMove={moveQuestion}
+                        onQuestionChange={handleQuestionChange}
+                        onOptionChange={handleOptionChange}
+                        onOptionAdd={addOptionToQuestion}
+                        onSubmit={handleSubmit}
+                        topicOptions={topicOptions}
+                        tagOptions={tagOptions}
+                        userOptions={userOptions}
+                        onDeletePhoto={handleDeletePhoto}
+                    />
+                </Card.Body>
             </Card>
         </Container>
     );

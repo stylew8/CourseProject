@@ -13,6 +13,8 @@ using backend.Infrastructure.Authorization;
 using Server.Infrastructure.Middlewares;
 using backend.Repositories.Interfaces;
 using backend.Services.Interfaces;
+using Amazon.S3;
+using backend.Infastructure.Helpers;
 
 
 namespace backend
@@ -66,6 +68,14 @@ namespace backend
             services.AddScoped<IUserDashboardService, UserDashboardService>();
             services.AddScoped<IAdminRepository, AdminRepository>();
             services.AddScoped<IAdminService, AdminService>();
+            services.AddScoped<ISearchRepository, SearchRepository>();
+            services.AddScoped<ISearchService, SearchService>();
+
+            var awsOptions = configuration.GetAWSOptions();
+            services.AddDefaultAWSOptions(awsOptions);
+            services.Configure<AwsSettings>(configuration.GetSection("AWS"));
+            services.AddAWSService<IAmazonS3>();
+            services.AddTransient<IS3Service, S3Service>();
 
             services.AddCors(options =>
             {

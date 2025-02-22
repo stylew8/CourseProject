@@ -16,66 +16,67 @@ import EditTemplatePage from './pages/EditTemplatePage';
 import ProtectedRoute from './components/ProtectedRoute';
 import ThemeSwitcher from './components/ThemeSwitcher';
 
+import { ToastContainer } from 'react-toastify';
 import { AuthContext } from './context/AuthContext';
+import PublicRoute from './components/PublicRoute';
+import { Admin } from './api/roles';
+import './App.css';
 
 function App() {
-    const { isAuthenticated, logout } = useContext(AuthContext);
+    const { isAuthenticated, logout, roles } = useContext(AuthContext);
 
     return (
         <Router>
-            <Navbar bg="dark" variant="dark" expand="lg" className="shadow">
+            <Navbar bg="light" variant="light" expand="lg" className="shadow">
                 <Container>
-                    <Navbar.Brand as={Link} to="/" className="fw-bold">
+                    <Navbar.Brand as={Link} to="/" className="fw-bold" >
                         Custom Forms
                     </Navbar.Brand>
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
                     <Navbar.Collapse id="basic-navbar-nav">
                         <Nav className="me-auto">
-                            <Nav.Link as={Link} to="/" className="text-light">
-                                Home
-                            </Nav.Link>
-                            <Nav.Link as={Link} to="/dashboard" className="text-light">
-                                Dashboard
-                            </Nav.Link>
-                            <Nav.Link as={Link} to="/admin" className="text-light">
-                                Admin
-                            </Nav.Link>
-                            <Nav.Link as={Link} to="/create-template" className="text-light">
-                                Create Template
-                            </Nav.Link>
-                            <Nav.Link as={Link} to="/edit-form/1" className="text-light">
-                                Edit Form
-                            </Nav.Link>
-                            <Nav.Link as={Link} to="/edit-template/1" className="text-light">
-                                Edit Template
-                            </Nav.Link>
-                        </Nav>
-                        <Nav>
-                            {isAuthenticated ? (
-                                <Nav.Link onClick={logout} className="text-light">
-                                    Logout
+                            {isAuthenticated && (
+                                <Nav>
+                                    <Nav.Link as={Link} to="/dashboard" className="text-dark">
+                                        Dashboard
+                                    </Nav.Link>
+                                    <Nav.Link as={Link} to="/create-template" className="text-dark">
+                                        Create template
+                                    </Nav.Link>
+                                </Nav>
+                            )}
+                            {roles.includes(Admin) && (
+                                <Nav.Link as={Link} to="/admin" className="text-dark">
+                                    Admin
                                 </Nav.Link>
-                            ) : (
-                                <>
-                                    <Nav.Link as={Link} to="/login" className="text-light">
-                                        Login
-                                    </Nav.Link>
-                                    <Nav.Link as={Link} to="/register" className="text-light">
-                                        Register
-                                    </Nav.Link>
-                                </>
                             )}
                         </Nav>
+                            <ThemeSwitcher />
+                        <Nav className='mx-5'>
+                                {isAuthenticated ? (
+                                    <Nav.Link onClick={logout} className="text-danger">
+                                        Logout
+                                    </Nav.Link>
+                                ) : (
+                                    <>
+                                        <Nav.Link as={Link} to="/login" className="text-dark">
+                                            Login
+                                        </Nav.Link>
+                                        <Nav.Link as={Link} to="/register" className="text-dark">
+                                            Register
+                                        </Nav.Link>
+                                    </>
+                                )}
+                        </Nav>
                     </Navbar.Collapse>
-                    <ThemeSwitcher />
                 </Container>
             </Navbar>
 
             <Container className="mt-5">
                 <Routes>
                     <Route path="/" element={<HomePage />} />
-                    <Route path="/login" element={<LoginPage />} />
-                    <Route path="/register" element={<RegisterPage />} />
+                    <Route path="/login" element={<PublicRoute component={LoginPage} />} />
+                    <Route path="/register" element={<PublicRoute component={RegisterPage} />} />
                     <Route path="/dashboard" element={<ProtectedRoute component={UserDashboard} />} />
                     <Route path="/template/:id" element={<TemplatePage />} />
                     <Route path="/admin" element={<ProtectedRoute component={AdminPage} adminOnly={true} />} />
@@ -85,6 +86,19 @@ function App() {
                     <Route path="*" element={<Navigate to="/" replace />} />
                 </Routes>
             </Container>
+
+            <ToastContainer 
+            position="top-right" 
+            autoClose={5000} 
+            hideProgressBar={false} 
+            newestOnTop={false} 
+            closeOnClick 
+            rtl={false} 
+            pauseOnFocusLoss 
+            draggable 
+            pauseOnHover
+            />
+            
         </Router>
     );
 }

@@ -2,9 +2,8 @@
 
 namespace backend.Repositories.Models;
 
-public class FilledForm
+public class FilledForm : Entity
 {
-    public int Id { get; set; }
 
     public int TemplateId { get; set; }
     public Template Template { get; set; }

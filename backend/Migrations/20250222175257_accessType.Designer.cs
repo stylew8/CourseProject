@@ -11,8 +11,8 @@ using backend.Repositories.Models;
 namespace backend.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250219123823_questionType")]
-    partial class questionType
+    [Migration("20250222175257_accessType")]
+    partial class accessType
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -238,6 +238,12 @@ namespace backend.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("ModifiedAt")
+                        .HasColumnType("datetime(6)");
+
                     b.Property<DateTime>("SubmittedAt")
                         .HasColumnType("datetime(6)");
 
@@ -263,6 +269,12 @@ namespace backend.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("ModifiedAt")
+                        .HasColumnType("datetime(6)");
+
                     b.Property<int>("Order")
                         .HasColumnType("int");
 
@@ -286,9 +298,15 @@ namespace backend.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("longtext");
+
+                    b.Property<DateTime>("ModifiedAt")
+                        .HasColumnType("datetime(6)");
 
                     b.Property<int>("Order")
                         .HasColumnType("int");
@@ -314,11 +332,38 @@ namespace backend.Migrations
                     b.ToTable("Questions");
                 });
 
+            modelBuilder.Entity("backend.Repositories.Models.Tag", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("ModifiedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Tags");
+                });
+
             modelBuilder.Entity("backend.Repositories.Models.Template", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    b.Property<string>("AccessType")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("CreatorId")
                         .IsRequired()
@@ -328,15 +373,102 @@ namespace backend.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<DateTime>("ModifiedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("PhotoUrl")
+                        .HasColumnType("longtext");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("longtext");
+
+                    b.Property<int>("TopicId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CreatorId");
 
+                    b.HasIndex("TopicId");
+
                     b.ToTable("Templates");
+                });
+
+            modelBuilder.Entity("backend.Repositories.Models.TemplateTag", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("ModifiedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("TagId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TemplateId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TagId");
+
+                    b.HasIndex("TemplateId");
+
+                    b.ToTable("TemplateTags");
+                });
+
+            modelBuilder.Entity("backend.Repositories.Models.TemplateUser", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("ModifiedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("TemplateId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TemplateId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("TemplateUsers");
+                });
+
+            modelBuilder.Entity("backend.Repositories.Models.Topic", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("ModifiedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Topics");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -431,6 +563,10 @@ namespace backend.Migrations
                             b1.Property<int>("QuestionId")
                                 .HasColumnType("int");
 
+                            b1.Property<string>("QuestionOptionsSnapshot")
+                                .IsRequired()
+                                .HasColumnType("longtext");
+
                             b1.Property<string>("QuestionTextSnapshot")
                                 .IsRequired()
                                 .HasColumnType("longtext");
@@ -496,7 +632,53 @@ namespace backend.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("backend.Repositories.Models.Topic", "Topic")
+                        .WithMany("Templates")
+                        .HasForeignKey("TopicId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Creator");
+
+                    b.Navigation("Topic");
+                });
+
+            modelBuilder.Entity("backend.Repositories.Models.TemplateTag", b =>
+                {
+                    b.HasOne("backend.Repositories.Models.Tag", "Tag")
+                        .WithMany("TemplateTags")
+                        .HasForeignKey("TagId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("backend.Repositories.Models.Template", "Template")
+                        .WithMany("TemplateTags")
+                        .HasForeignKey("TemplateId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Tag");
+
+                    b.Navigation("Template");
+                });
+
+            modelBuilder.Entity("backend.Repositories.Models.TemplateUser", b =>
+                {
+                    b.HasOne("backend.Repositories.Models.Template", "Template")
+                        .WithMany("AllowedUsers")
+                        .HasForeignKey("TemplateId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Template");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("backend.Repositories.Models.Question", b =>
@@ -504,9 +686,23 @@ namespace backend.Migrations
                     b.Navigation("Options");
                 });
 
+            modelBuilder.Entity("backend.Repositories.Models.Tag", b =>
+                {
+                    b.Navigation("TemplateTags");
+                });
+
             modelBuilder.Entity("backend.Repositories.Models.Template", b =>
                 {
+                    b.Navigation("AllowedUsers");
+
                     b.Navigation("Questions");
+
+                    b.Navigation("TemplateTags");
+                });
+
+            modelBuilder.Entity("backend.Repositories.Models.Topic", b =>
+                {
+                    b.Navigation("Templates");
                 });
 #pragma warning restore 612, 618
         }

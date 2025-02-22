@@ -6,12 +6,12 @@ const DraggableQuestion = ({
     question, 
     index, 
     moveQuestion, 
-    handleQuestionChange, 
-    removeQuestion, 
+    onChange,
+    onRemove,
     updateOptions, 
-    addOptionToQuestion, 
-    handleOptionChange 
-}) => {
+    onAddOption, 
+    onOptionChange 
+}) =>  {
     const ref = useRef(null);
     const dragHandleRef = useRef(null);
 
@@ -44,11 +44,11 @@ const DraggableQuestion = ({
                 question={question}
                 index={index}
                 dragHandleRef={dragHandleRef}
-                handleQuestionChange={handleQuestionChange}
-                removeQuestion={removeQuestion}
+                handleQuestionChange={onChange}
+                removeQuestion={onRemove}
                 updateOptions={updateOptions}
-                addOptionToQuestion={addOptionToQuestion}
-                handleOptionChange={handleOptionChange}
+                addOptionToQuestion={onAddOption}
+                handleOptionChange={onOptionChange}
             />
         </div>
     );

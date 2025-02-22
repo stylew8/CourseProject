@@ -20,16 +20,28 @@ public class TemplatesService : ITemplatesService
         _context = context;
     }
 
-    public async Task<Template> CreateTemplateAsync(TemplateDto dto, string creatorId)
+    public async Task<Template> CreateTemplateAsync(TemplateDto dto, string creatorId, string? photoUrl)
     {
         await using var transaction = await _context.Database.BeginTransactionAsync();
         try
         {
+            var topicEntity = await _context.Topics
+                .FirstOrDefaultAsync(t => t.Name.ToLower() == dto.Topic.ToLower());
+            if (topicEntity == null)
+            {
+                topicEntity = new Topic { Name = dto.Topic };
+                _context.Topics.Add(topicEntity);
+                await _context.SaveChangesAsync();
+            }
+
             var template = new Template
             {
                 Title = dto.Title,
                 Description = dto.Description,
+                PhotoUrl = photoUrl,
                 CreatorId = creatorId,
+                TopicId = topicEntity.Id,
+                AccessType = dto.AccessType,
                 Questions = dto.Questions.Select(q => new Question
                 {
                     Order = q.Order,
@@ -45,36 +57,64 @@ public class TemplatesService : ITemplatesService
                 }).ToList()
             };
 
+            if (dto.TagIds != null && dto.TagIds.Any())
+            {
+                var validTagIds = await _context.Tags
+                    .Where(t => dto.TagIds.Contains(t.Id))
+                    .Select(t => t.Id)
+                    .ToListAsync();
+
+                foreach (var tagId in validTagIds)
+                {
+                    template.TemplateTags.Add(new TemplateTag { TagId = tagId });
+                }
+            }
+
+            if (dto.AccessType?.ToLower() == "private" && dto.AllowedUserIds != null)
+            {
+                var validUserIds = await _context.Users
+                    .Where(u => dto.AllowedUserIds.Contains(u.Id))
+                    .Select(u => u.Id)
+                    .ToListAsync();
+
+                foreach (var userId in validUserIds)
+                {
+                    template.AllowedUsers.Add(new TemplateUser { UserId = userId });
+                }
+            }
+
             await _templatesRepository.CreateTemplateAsync(template);
             await transaction.CommitAsync();
             return template;
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             await transaction.RollbackAsync();
             throw new ServerInternalException("Server internal error");
         }
     }
 
-    public async Task<Template> GetTemplateFullAsync(int id)
-    {
-        var template = await _templatesRepository.GetTemplateByIdFullAsync(id);
-        return template;
-    }
 
-    public async Task<Template> GetTemplatePublicAsync(int id)
-    {
-        var template = await _templatesRepository.GetTemplateByIdFullAsync(id);
-        return template;
-    }
 
-    public async Task<Template> UpdateTemplateAsync(int id, TemplateDto dto)
+
+    public async Task<Template> UpdateTemplateAsync(int id, TemplateDto dto, string photoUrl)
     {
         var template = await _templatesRepository.GetTemplateByIdFullAsync(id);
         if (template == null)
             throw new NotFoundException("Template not found");
 
+        if (!string.IsNullOrEmpty(photoUrl))
+        {
+            template.PhotoUrl = photoUrl;
+        }
+
         await _templatesRepository.UpdateTemplateAsync(template, dto);
+        return template;
+    }
+
+    public async Task<Template?> GetTemplateFullAsync(int id)
+    {
+        var template = await _templatesRepository.GetTemplateByIdFullAsync(id);
         return template;
     }
 
@@ -236,4 +276,29 @@ public class TemplatesService : ITemplatesService
             .OrderByDescending(x => x.Count)
             .ToList();
     }
+
+    public async Task<Template?> GetTemplateByIdAsync(string id)
+    {
+        if (!int.TryParse(id, out int templateId))
+            return null;
+
+        return await _context.Templates
+            .Include(t => t.Questions)
+            .ThenInclude(q => q.Options)
+            .FirstOrDefaultAsync(t => t.Id == templateId);
+    }
+
+    public async Task DeleteTemplateAsync(string id)
+    {
+        if (!int.TryParse(id, out int templateId))
+            throw new ArgumentException("Incorrect template id");
+
+        var template = await _context.Templates.FindAsync(templateId);
+        if (template == null)
+            throw new NotFoundException("template was not found");
+
+        _context.Templates.Remove(template);
+        await _context.SaveChangesAsync();
+    }
+
 }

@@ -1,17 +1,28 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from 'react-bootstrap';
 
 const ThemeSwitcher = () => {
     const [isDarkMode, setIsDarkMode] = useState(false);
 
+    useEffect(() => {
+        const storedTheme = localStorage.getItem('isDarkMode');
+        if (storedTheme !== null) {
+            const isDark = storedTheme === 'true';
+            setIsDarkMode(isDark);
+            document.body.classList.toggle('dark-mode', isDark);
+        }
+    }, []);
+
     const toggleTheme = () => {
-        setIsDarkMode(!isDarkMode);
-        document.body.classList.toggle('dark-mode', !isDarkMode);
+        const newTheme = !isDarkMode;
+        setIsDarkMode(newTheme);
+        localStorage.setItem('isDarkMode', newTheme);
+        document.body.classList.toggle('dark-mode', newTheme);
     };
 
     return (
         <Button variant={isDarkMode ? 'light' : 'dark'} onClick={toggleTheme}>
-            {isDarkMode ? 'Light Mode' : 'Dark Mode'}
+            {isDarkMode ? 'Light' : 'Dark'}
         </Button>
     );
 };

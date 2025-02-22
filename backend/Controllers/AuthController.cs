@@ -79,26 +79,18 @@ namespace backend.Controllers
 
             var user = await _userManager.FindByEmailAsync(model.Email);
 
-            // Пользователь не найден или null
             if (user == null)
                 throw new AuthenticationException("Invalid login credentials.");
 
-            // 1. Проверяем, не заблокирован ли пользователь
-            //    (если включена блокировка и достигнут лимит неудачных попыток).
             if (await _userManager.IsLockedOutAsync(user))
             {
-                // Можем вернуть более специфичное сообщение: "Ваш аккаунт временно заблокирован" и т.д.
                 throw new AuthenticationException("User account is locked.");
             }
 
-            // 2. Проверяем пароль
             if (!await _userManager.CheckPasswordAsync(user, model.Password))
             {
-                // Пароль неверный → увеличиваем счётчик неудачных попыток
                 await _userManager.AccessFailedAsync(user);
 
-                // Повторно проверим, возможно пользователь теперь
-                // уже достиг лимита неудачных попыток и заблокирован
                 if (await _userManager.IsLockedOutAsync(user))
                 {
                     throw new AuthenticationException("User account is locked.");

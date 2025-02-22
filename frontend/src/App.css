@@ -13,6 +13,30 @@
   }
 }
 
+
+body .navbar .nav-link {
+  color: #302929;
+}
+
+body.dark-mode .navbar .navbar-brand {
+  color: #ffffff !important;
+}
+
+body.dark-mode {
+  background-color: #332e2e;
+  color: #ffffff;
+}
+
+body.dark-mode .navbar {
+  background-color: #332e2e !important;
+  color: #ffffff !important;
+}
+
+body.dark-mode .navbar .nav-link {
+  color: #ffffff !important;
+}
+
+
 .App-header {
   background-color: #282c34;
   min-height: 100vh;

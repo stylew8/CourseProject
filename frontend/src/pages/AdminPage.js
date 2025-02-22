@@ -2,6 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { Container, TextField, Box, Button, Typography, Dialog, DialogTitle, DialogContent, DialogActions, MenuItem } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import axiosInstance from '../api/axiosInstance';
+import { Admin, User } from '../api/roles';
+
+const actions = {
+    setrole: 'setrole',
+    block: 'block',
+    unblock: 'unblock',
+    delete: 'delete'
+}
+
+const ADMIN_USERS_ROUTE = '/admin/users';
 
 const AdminPage = () => {
     const [users, setUsers] = useState([]);
@@ -10,13 +20,13 @@ const AdminPage = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
     const [actionDialogOpen, setActionDialogOpen] = useState(false);
-    const [selectedAction, setSelectedAction] = useState('block');
-    const [selectedRole, setSelectedRole] = useState('User'); // Для действия setrole
+    const [selectedAction, setSelectedAction] = useState(actions.block);
+    const [selectedRole, setSelectedRole] = useState(User);
 
     useEffect(() => {
         const fetchUsers = async () => {
             try {
-                const response = await axiosInstance.get('/admin/users');
+                const response = await axiosInstance.get(ADMIN_USERS_ROUTE);
                 setUsers(response.data);
             } catch (err) {
                 console.error(err);
@@ -30,7 +40,7 @@ const AdminPage = () => {
 
     const refreshUsers = async () => {
         try {
-            const response = await axiosInstance.get('/admin/users');
+            const response = await axiosInstance.get(ADMIN_USERS_ROUTE);
             setUsers(response.data);
         } catch (err) {
             console.error(err);
@@ -49,33 +59,30 @@ const AdminPage = () => {
 
     const handleApplyAction = async () => {
         try {
-            // Добавляем проверку для действия setrole
-            if (selectedAction === 'setrole' && !selectedRole) {
+            if (selectedAction === actions.setrole && !selectedRole) {
                 setError('Please select a role');
                 return;
             }
 
-            // Формируем конфигурацию запроса
             const config = {
                 data: { userIds: selectionModel }
             };
 
             switch (selectedAction) {
-                case 'block':
-                    await axiosInstance.put('/admin/users/block', { userIds: selectionModel });
+                case actions.block:
+                    await axiosInstance.put(`${ADMIN_USERS_ROUTE}/${actions.block}`, { userIds: selectionModel });
                     break;
-                case 'unblock':
-                    await axiosInstance.put('/admin/users/unblock', { userIds: selectionModel });
+                case actions.unblock:
+                    await axiosInstance.put(`${ADMIN_USERS_ROUTE}/${actions.unblock}`, { userIds: selectionModel });
                     break;
-                case 'setrole':
-                    await axiosInstance.put('/admin/users/setrole', {
+                case actions.setrole:
+                    await axiosInstance.put(`${ADMIN_USERS_ROUTE}/${actions.setrole}`, {
                         userIds: selectionModel,
-                        role: selectedRole.toUpperCase() // Приводим роль к нужному формату
+                        role: selectedRole.toUpperCase()
                     });
                     break;
-                case 'delete':
-                    // Для DELETE-запросов данные передаем через config
-                    await axiosInstance.delete('/admin/users', config);
+                case actions.delete:
+                    await axiosInstance.delete(`${ADMIN_USERS_ROUTE}`, config);
                     break;
                 default:
                     throw new Error('Unknown action');
@@ -85,7 +92,6 @@ const AdminPage = () => {
             setSelectionModel([]);
         } catch (err) {
             console.error(err);
-            // Более информативное сообщение об ошибке
             setError(`Error applying action: ${err.response?.data?.message || err.message}`);
         } finally {
             setActionDialogOpen(false);
@@ -107,6 +113,8 @@ const AdminPage = () => {
             user.id.toString().includes(q) ||
             (user.userName && user.userName.toLowerCase().includes(q)) ||
             (user.email && user.email.toLowerCase().includes(q)) ||
+            (user.firstName && user.firstName.toLowerCase().includes(q)) ||
+            (user.lastName && user.lastName.toLowerCase().includes(q)) ||
             (user.role && user.role.toLowerCase().includes(q))
         );
     });
@@ -116,18 +124,50 @@ const AdminPage = () => {
             <Typography variant="h4" gutterBottom>
                 Admin Panel
             </Typography>
-            <Box mb={2} display="flex" justifyContent="space-between" alignItems="center">
+            <Box
+                mb={2}
+                display="flex"
+                justifyContent="space-between"
+                alignItems="center"
+            >
                 <TextField
                     label="Search users"
                     variant="outlined"
                     size="small"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
+                    sx={{
+                        backgroundColor: 'background.paper',
+                        '& .MuiInputBase-input': {
+                            color: 'text.primary'
+                        },
+                        '& .MuiOutlinedInput-notchedOutline': {
+                            borderColor: 'divider'
+                        },
+                        '& label': {
+                            color: 'text.primary'
+                        }
+                    }}
                 />
-                <Button variant="outlined" onClick={handleOpenDialog} disabled={selectionModel.length === 0}>
+                <Button
+                    variant="outlined"
+                    onClick={handleOpenDialog}
+                    disabled={selectionModel.length === 0}
+                    sx={(theme) => ({
+                        borderColor: theme.palette.primary.main,
+                        color: theme.palette.primary.main,
+                        '&:hover': {
+                            borderColor:
+                                theme.palette.mode === theme.palette.primary.main
+                                    ? theme.palette.primary.light
+                                    : theme.palette.primary.main,
+                        },
+                    })}
+                >
                     Apply Action
                 </Button>
             </Box>
+
             {loading ? (
                 <Typography>Loading...</Typography>
             ) : error ? (
@@ -144,11 +184,26 @@ const AdminPage = () => {
                         rowSelectionModel={selectionModel}
                         onRowSelectionModelChange={(newSelection) => setSelectionModel(newSelection)}
                         getRowId={(row) => row.id}
+                        sx={{
+                            backgroundColor: 'background.paper',
+                            color: 'text.primary',
+                            '& .MuiDataGrid-cell': {
+                                borderBottom: '1px solid rgba(255,255,255,0.1)',
+                            },
+                        }}
                     />
                 </div>
             )}
 
-            <Dialog open={actionDialogOpen} onClose={handleCloseDialog}>
+            <Dialog
+                open={actionDialogOpen}
+                onClose={handleCloseDialog}
+                sx={{
+                    '& .MuiDialog-paper': {
+                        minWidth: 300
+                    }
+                }}
+            >
                 <DialogTitle>Apply Action</DialogTitle>
                 <DialogContent>
                     <TextField
@@ -159,22 +214,22 @@ const AdminPage = () => {
                         fullWidth
                         margin="dense"
                     >
-                        <MenuItem value="block">Block</MenuItem>
-                        <MenuItem value="unblock">Unblock</MenuItem>
-                        <MenuItem value="setrole">Set Role</MenuItem>
-                        <MenuItem value="delete">Delete</MenuItem>
+                        <MenuItem value={actions.block}>Block</MenuItem>
+                        <MenuItem value={actions.unblock}>Unblock</MenuItem>
+                        <MenuItem value={actions.setrole}>Set Role</MenuItem>
+                        <MenuItem value={actions.delete}>Delete</MenuItem>
                     </TextField>
-                    {selectedAction === 'setrole' && (
+                    {selectedAction === actions.setrole && (
                         <TextField
-                            select // Добавляем select для выбора из доступных ролей
+                            select
                             label="Role"
                             value={selectedRole}
                             onChange={(e) => setSelectedRole(e.target.value)}
                             fullWidth
                             margin="dense"
                         >
-                            <MenuItem key={"User"} value="User">User</MenuItem>
-                            <MenuItem key={"Admin"} value="Admin">Admin</MenuItem>
+                            <MenuItem key={User} value={User}>User</MenuItem>
+                            <MenuItem key={Admin} value={Admin}>Admin</MenuItem>
                         </TextField>
                     )}
                 </DialogContent>

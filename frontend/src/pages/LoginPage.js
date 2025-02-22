@@ -1,21 +1,12 @@
-// src/pages/LoginPage.js
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext } from 'react';
 import { Form, Button, Alert } from 'react-bootstrap';
 import { AuthContext } from '../context/AuthContext';
-import { useNavigate } from 'react-router-dom';
 
 const LoginPage = () => {
-    const { login, loading, error, isAuthenticated } = useContext(AuthContext);
+    const { login, loading, error } = useContext(AuthContext);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [rememberMe, setRememberMe] = useState(false);
-    const navigate = useNavigate();
-
-    useEffect(() => {
-        if (isAuthenticated) {
-            navigate('/dashboard');
-        }
-    }, [isAuthenticated, navigate]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();

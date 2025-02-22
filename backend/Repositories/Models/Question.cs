@@ -2,9 +2,8 @@ using System.Text.Json.Serialization;
 
 namespace backend.Repositories.Models
 {
-    public class Question
+    public class Question : Entity
     {
-        public int Id { get; set; }
         public int Order { get; set; }
         public string Type { get; set; }
         public string Text { get; set; }

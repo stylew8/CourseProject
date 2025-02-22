@@ -1,151 +1,138 @@
-// src/pages/CreateTemplatePage.js
 import React, { useState } from 'react';
-import { Form, Button, Container, Card } from 'react-bootstrap';
-import { DndProvider } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
-import DraggableQuestion from '../components/DraggableQuestion';
-import { createTemplate } from '../api/templateService';
+import { Container, Card } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
+import { useQuestions } from '../hooks/useQuestions';
+import TemplateForm from '../components/TemplateForm';
+import { createTemplate } from '../api/templateService';
+import { topicOptions, tagOptions, userOptions } from '../config/options';
+import { notifyError }from '../utils/notification';
+import { checkbox, dropdown } from '../utils/questionsTypes';
 
 const CreateTemplatePage = () => {
-    const [title, setTitle] = useState('');
-    const [description, setDescription] = useState('');
-    const [questions, setQuestions] = useState([]);
     const navigate = useNavigate();
+    const {
+        questions,
+        addQuestion,
+        removeQuestion,
+        moveQuestion,
+        handleQuestionChange,
+        handleOptionChange,
+        addOptionToQuestion
+    } = useQuestions([]);
 
-    const addQuestion = () => {
-        const newQuestion = {
-            id: Date.now(),
-            order: questions.length,
-            type: 'single-line',
-            text: '',
-            description: '',
-            showInTable: false,
-            options: []
-        };
-        setQuestions([...questions, newQuestion]);
-    };
-
-    const handleQuestionChange = (index, key, value) => {
-        const updatedQuestions = [...questions];
-        updatedQuestions[index][key] = value;
-        setQuestions(updatedQuestions);
-    };
-
-    const addOptionToQuestion = (index) => {
-        const updatedQuestions = [...questions];
-        if (updatedQuestions[index].options.length < 4) {
-            const newOption = {
-                id: Date.now(),
-                order: updatedQuestions[index].options.length,
-                value: ''
-            };
-            updatedQuestions[index].options.push(newOption);
-            setQuestions(updatedQuestions);
-        } else {
-            alert('Maximum of 4 options allowed');
-        }
-    };
-
-    const handleOptionChange = (questionIndex, optionIndex, value) => {
-        if (questions[questionIndex] && questions[questionIndex].options[optionIndex]) {
-            const updatedQuestions = [...questions];
-            updatedQuestions[questionIndex].options[optionIndex].value = value;
-            setQuestions(updatedQuestions);
-        }
-    };
-
-    const updateOptions = (questionIndex, newOptions) => {
-        const updatedQuestions = [...questions];
-        newOptions.forEach((option, i) => {
-            option.order = i;
-        });
-        updatedQuestions[questionIndex].options = newOptions;
-        setQuestions(updatedQuestions);
-    };
-
-    const removeQuestion = (index) => {
-        const updatedQuestions = questions.filter((_, i) => i !== index);
-        updatedQuestions.forEach((q, i) => {
-            q.order = i;
-        });
-        setQuestions(updatedQuestions);
-    };
-
-    const moveQuestion = (dragIndex, hoverIndex) => {
-        const updatedQuestions = Array.from(questions);
-        const [movedQuestion] = updatedQuestions.splice(dragIndex, 1);
-        updatedQuestions.splice(hoverIndex, 0, movedQuestion);
-        updatedQuestions.forEach((q, i) => {
-            q.order = i;
-        });
-        setQuestions(updatedQuestions);
-    };
+    const [formData, setFormData] = useState({
+        title: '',
+        description: '',
+        topic: '',
+        customTopic: '',
+        tags: [],
+        accessType: 'public',
+        selectedUsers: [],
+        photo: null
+    });
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const data = { title, description, questions };
+    
+        const cleanedQuestions = questions.map(({ 
+            order, 
+            type, 
+            text, 
+            description, 
+            showInTable, 
+            options 
+        }) => ({
+            order,
+            type,
+            text,
+            description,
+            showInTable,
+            options: options?.map(({ order, value }) => ({ order, value })) || []
+        }));
+    
+        if (cleanedQuestions.length === 0) {
+            notifyError("Please add at least one question.");
+            return;
+        }
+    
+        const optionQuestions = cleanedQuestions.filter(q => 
+            q.type === checkbox || q.type === dropdown
+        );
+        
+        if (optionQuestions.some(q => q.options.length < 2)) {
+            notifyError("Questions with options must have at least 2 choices");
+            return;
+        }
+    
+        if (!formData.topic) {
+            notifyError("Please select a topic");
+            return;
+        }
+    
+        let finalTopic = formData.topic;
+        if (formData.topic === 'Other') {
+            if (!formData.customTopic.trim()) {
+                notifyError("Please enter custom topic name");
+                return;
+            }
+            finalTopic = formData.customTopic;
+        }
+    
+        const formPayload = new FormData();
+        formPayload.append('title', formData.title);
+        formPayload.append('description', formData.description);
+        formPayload.append('topic', finalTopic);
+        formPayload.append('accessType', formData.accessType);
+        
+        if (formData.tags.length > 0) {
+            formPayload.append('tagIds', JSON.stringify(
+                formData.tags.map(tag => tag.value)
+            ));
+        }
+    
+        if (formData.accessType === 'private' && formData.selectedUsers.length > 0) {
+            formPayload.append('allowedUserIds', JSON.stringify(
+                formData.selectedUsers.map(user => user.value)
+            ));
+        }
+    
+        if (formData.photo) {
+            formPayload.append('photo', formData.photo);
+        }
+    
+        formPayload.append('questions', JSON.stringify(cleanedQuestions));
+    
         try {
-            const result = await createTemplate(data);
-            console.log('Template created:', result);
+            const result = await createTemplate(formPayload);
             navigate(`/edit-template/${result.id}`);
         } catch (error) {
-            console.error('Error creating template:', error.response?.data || error.message);
+            console.error('Template creation error:', error);
+            notifyError(error.response?.data?.message || 'Failed to create template');
         }
     };
 
     return (
-        <Container>
-            <Card className="p-4 shadow-sm">
-                <h1 className="mb-4 text-center">Create New Form</h1>
-                <Form onSubmit={handleSubmit}>
-                    <Form.Group className="mb-3">
-                        <Form.Label className="fw-bold">Form Title</Form.Label>
-                        <Form.Control
-                            type="text"
-                            placeholder="Enter form title"
-                            value={title}
-                            onChange={(e) => setTitle(e.target.value)}
-                        />
-                    </Form.Group>
-
-                    <Form.Group className="mb-3">
-                        <Form.Label className="fw-bold">Description</Form.Label>
-                        <Form.Control
-                            as="textarea"
-                            rows={3}
-                            placeholder="Enter form description"
-                            value={description}
-                            onChange={(e) => setDescription(e.target.value)}
-                        />
-                    </Form.Group>
-
-                    <h3 className="mb-3">Questions</h3>
-                    <DndProvider backend={HTML5Backend}>
-                        {questions.map((question, index) => (
-                            <DraggableQuestion
-                                key={question.id}
-                                index={index}
-                                question={question}
-                                handleQuestionChange={handleQuestionChange}
-                                handleOptionChange={handleOptionChange}
-                                updateOptions={updateOptions}
-                                addOptionToQuestion={addOptionToQuestion}
-                                removeQuestion={removeQuestion}
-                                moveQuestion={moveQuestion}
-                            />
-                        ))}
-                    </DndProvider>
-
-                    <div className="d-flex justify-content-between gap-3 text-center">
-                        <Button variant="outline-primary" onClick={addQuestion} className="mb-3">
-                            Add Question
-                        </Button>
-                        <Button type="submit" variant="primary">
-                            Submit Form
-                        </Button>
-                    </div>
-                </Form>
+        <Container className="py-4">
+            <Card>
+                <Card.Body>
+                    <h1 className="text-center mb-4">Create New Template</h1>
+                    <TemplateForm
+                        mode="create"
+                        formData={formData}
+                        setFormData={setFormData}
+                        questions={questions}
+                        onQuestionAdd={addQuestion}
+                        onQuestionRemove={removeQuestion}
+                        onQuestionMove={moveQuestion}
+                        onQuestionChange={handleQuestionChange}
+                        onOptionChange={handleOptionChange}
+                        onOptionAdd={addOptionToQuestion}
+                        onSubmit={handleSubmit}
+                        topicOptions={topicOptions}
+                        tagOptions={tagOptions}
+                        userOptions={userOptions}
+                    />
+                </Card.Body>
             </Card>
         </Container>
     );
