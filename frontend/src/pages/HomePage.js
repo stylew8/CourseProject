@@ -24,10 +24,24 @@ const HomePage = () => {
                 );
         };
 
+        const fetchTags = () => {
+            axiosInstance.get('/templates/tags')
+            .then(response => {
+                setTags(response.data);
+            })
+            .catch(error => {
+                console.error('Error fetching templates:', error);
+            })
+            .finally(f => {
+                setLoading(false);
+            }
+            );
+        };
+
         setLoading(true);
         fetchTemplates();
+        fetchTags();
 
-        setTags(['Education', 'Feedback', 'Survey', 'Job Application']);
     }, []);
 
     if(loading){

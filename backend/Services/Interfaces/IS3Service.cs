@@ -7,4 +7,5 @@ public interface IS3Service
     Task<Stream> GetFileAsync(string fileKey);
 
     string BucketName { get; }
+    string BucketUrlPrefix { get; }
 }

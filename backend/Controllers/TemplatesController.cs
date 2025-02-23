@@ -58,7 +58,7 @@ namespace backend.Controllers
             }
 
             var updated = await templatesService.UpdateTemplateAsync(id, dto, photoUrl);
-            return Ok(updated);
+            return Ok();
         }
 
 
@@ -95,10 +95,20 @@ namespace backend.Controllers
         }
 
         [HttpGet("latest")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetLatestTemplates()
         {
             var templates = await templatesService.GetLatestTemplatesAsync();
             return Ok(templates);
+        }
+
+        [HttpGet("tags")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetTags()
+        {
+            var tags = await templatesService.GetTagsAsync();
+
+            return Ok(tags);
         }
 
         [HttpGet("{id}/filledForms")]
@@ -127,20 +137,18 @@ namespace backend.Controllers
                 return NotFound("Template not found.");
             }
 
-            if (!string.IsNullOrEmpty(template.PhotoUrl))
-            {
-                var bucketUrlPrefix = $"https://{s3Service.BucketName}.s3.amazonaws.com/";
-                if (template.PhotoUrl.StartsWith(bucketUrlPrefix))
-                {
-                    var key = template.PhotoUrl.Substring(bucketUrlPrefix.Length);
-
-                        await s3Service.DeleteFileAsync(key);
-                    
-
-                }
-            }
+            await templatesService.DeletePhoto(template.Id);
 
             await templatesService.DeleteTemplateAsync(id);
+
+            return NoContent();
+        }
+
+        [HttpDelete("{id}/photo")]
+        [Authorize(Policy = Policies.OwnerTemplateOrAdminPolicy)]
+        public async Task<IActionResult> DeletePhoto(int id)
+        {
+            await templatesService.DeletePhoto(id);
 
             return NoContent();
         }

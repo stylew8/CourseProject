@@ -1,4 +1,6 @@
-﻿namespace backend.Infastructure.Helpers;
+﻿using backend.Services;
+
+namespace backend.Infastructure.Helpers;
 
 public class AwsSettings
 {

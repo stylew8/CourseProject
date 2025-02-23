@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Container, Tabs, Tab, Card } from 'react-bootstrap';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import axiosInstance from '../api/axiosInstance';
 import { AuthContext } from '../context/AuthContext';
 
@@ -10,6 +10,7 @@ import FilledFormsTable from '../components/FilledFormsTable';
 import AggregationResults from '../components/AggregationResults';
 import FillForm from '../components/FillForm';
 import { Admin } from '../api/roles';
+import { notifyError, notifySuccess } from '../utils/notification';
 
 const TemplatePage = () => {
     const { id } = useParams();
@@ -23,14 +24,22 @@ const TemplatePage = () => {
     const [canViewResults, setCanViewResults] = useState(false);
     const [answers, setAnswers] = useState({});
 
+    const navigate = useNavigate();
+
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const responseTemplate = await axiosInstance.get(`/templates/public/${id}`);
+                
+                if (responseTemplate.data.accessType === 'private') {
+                    const allowedUserIds = responseTemplate.data.allowedUsers.map(userItem => userItem.id || userItem);
+                    if (!allowedUserIds.includes(user.id) && !roles.includes(Admin) && responseTemplate.data.creatorId !== user.id) {
+                        navigate('/');
+                        return;
+                    }
+                }
+                
                 setTemplate(responseTemplate.data);
-
-                console.log(responseTemplate.data);
-
                 const responseFilledForms = await axiosInstance.get(`/templates/${id}/filledForms`);
                 setFilledForms(responseFilledForms.data);
                 console.log(responseFilledForms.data);
@@ -52,7 +61,7 @@ const TemplatePage = () => {
             }
         };
         fetchData();
-    }, [id, user, roles]);
+    }, [id, user, roles, navigate]);
 
     if (loading) return <div>Loading...</div>;
     if (!template) return <div>Template not found.</div>;
@@ -77,10 +86,10 @@ const TemplatePage = () => {
         try {
             const payload = { answers };
             await axiosInstance.post(`/templates?templateId=${id}`, payload);
-            setSubmitSuccess('Form submitted successfully!');
+            notifySuccess('Form submitted successfully!');
         } catch (error) {
             console.error('Error submitting form:', error.response?.data || error.message);
-            setSubmitError('Error submitting the form. Please try again.');
+            notifyError('Error submitting the form. Please try again.');
         }
     };
 

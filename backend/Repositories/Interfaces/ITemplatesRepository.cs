@@ -11,4 +11,8 @@ public interface ITemplatesRepository
     Task AddFilledFormAsync(FilledForm filledForm);
     Task<List<Template>> GetLatestTemplatesAsync();
     Task<List<FilledForm>> GetFilledFormsAsync(int templateId);
+
+    Task<Template?> GetTemplatePhotoAsync(int id);
+    Task DeleteTemplatePhotoAsync(int id);
+    Task<List<string>> GetTags();
 }

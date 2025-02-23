@@ -30,6 +30,7 @@ const GeneralSettings = ({ template }) => (
                     <MarkdownPreviewComponent markdownText={template.description} />
 
                     <div className="mt-3">
+                        <strong>Tags:</strong>
                         <TagCloud tags={template.tags.map(x => x.label)} />
                     </div>
                 </Col>

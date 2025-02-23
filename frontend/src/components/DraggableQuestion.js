@@ -5,7 +5,7 @@ import QuestionCard from './QuestionCard';
 const DraggableQuestion = ({ 
     question, 
     index, 
-    moveQuestion, 
+    onMove, 
     onChange,
     onRemove,
     updateOptions, 
@@ -22,7 +22,7 @@ const DraggableQuestion = ({
             const dragIndex = item.index;
             const hoverIndex = index;
             if (dragIndex === hoverIndex) return;
-            moveQuestion(dragIndex, hoverIndex);
+            onMove(dragIndex, hoverIndex);
             item.index = hoverIndex;
         },
     });

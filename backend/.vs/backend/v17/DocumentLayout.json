@@ -3,24 +3,20 @@
   "WorkspaceRootPath": "C:\\Users\\vania\\Desktop\\Itransition\\CourseProject\\backend\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{F5A75263-518D-4080-861E-BD1C46696CE5}|backend.csproj|c:\\users\\vania\\desktop\\itransition\\courseproject\\backend\\services\\templatesservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{F5A75263-518D-4080-861E-BD1C46696CE5}|backend.csproj|solutionrelative:services\\templatesservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{F5A75263-518D-4080-861E-BD1C46696CE5}|backend.csproj|c:\\users\\vania\\desktop\\itransition\\courseproject\\backend\\backend.http||{5703B403-55E7-4C63-8C88-A8F52C7A45C5}",
+      "RelativeMoniker": "D:0:0:{F5A75263-518D-4080-861E-BD1C46696CE5}|backend.csproj|solutionrelative:backend.http||{5703B403-55E7-4C63-8C88-A8F52C7A45C5}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{F5A75263-518D-4080-861E-BD1C46696CE5}|backend.csproj|c:\\users\\vania\\desktop\\itransition\\courseproject\\backend\\repositories\\templatesrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{F5A75263-518D-4080-861E-BD1C46696CE5}|backend.csproj|solutionrelative:repositories\\templatesrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{F5A75263-518D-4080-861E-BD1C46696CE5}|backend.csproj|c:\\users\\vania\\desktop\\itransition\\courseproject\\backend\\services\\templatesservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F5A75263-518D-4080-861E-BD1C46696CE5}|backend.csproj|solutionrelative:services\\templatesservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{F5A75263-518D-4080-861E-BD1C46696CE5}|backend.csproj|c:\\users\\vania\\desktop\\itransition\\courseproject\\backend\\controllers\\templatescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{F5A75263-518D-4080-861E-BD1C46696CE5}|backend.csproj|solutionrelative:controllers\\templatescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{F5A75263-518D-4080-861E-BD1C46696CE5}|backend.csproj|c:\\users\\vania\\desktop\\itransition\\courseproject\\backend\\viewmodels\\dtos\\gettemplatedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{F5A75263-518D-4080-861E-BD1C46696CE5}|backend.csproj|solutionrelative:viewmodels\\dtos\\gettemplatedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{F5A75263-518D-4080-861E-BD1C46696CE5}|backend.csproj|c:\\users\\vania\\desktop\\itransition\\courseproject\\backend\\viewmodels\\dtos\\templatedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{F5A75263-518D-4080-861E-BD1C46696CE5}|backend.csproj|solutionrelative:viewmodels\\dtos\\templatedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{F5A75263-518D-4080-861E-BD1C46696CE5}|backend.csproj|c:\\users\\vania\\desktop\\itransition\\courseproject\\backend\\repositories\\templatesrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F5A75263-518D-4080-861E-BD1C46696CE5}|backend.csproj|solutionrelative:repositories\\templatesrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{F5A75263-518D-4080-861E-BD1C46696CE5}|backend.csproj|c:\\users\\vania\\desktop\\itransition\\courseproject\\backend\\repositories\\interfaces\\itemplatesrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -31,8 +27,24 @@
       "RelativeMoniker": "D:0:0:{F5A75263-518D-4080-861E-BD1C46696CE5}|backend.csproj|solutionrelative:services\\interfaces\\itemplatesservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{F5A75263-518D-4080-861E-BD1C46696CE5}|backend.csproj|c:\\users\\vania\\desktop\\itransition\\courseproject\\backend\\viewmodels\\dtos\\tagdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{F5A75263-518D-4080-861E-BD1C46696CE5}|backend.csproj|solutionrelative:viewmodels\\dtos\\tagdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{F5A75263-518D-4080-861E-BD1C46696CE5}|backend.csproj|c:\\users\\vania\\desktop\\itransition\\courseproject\\backend\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{F5A75263-518D-4080-861E-BD1C46696CE5}|backend.csproj|solutionrelative:appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F5A75263-518D-4080-861E-BD1C46696CE5}|backend.csproj|c:\\users\\vania\\desktop\\itransition\\courseproject\\backend\\services\\s3service.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F5A75263-518D-4080-861E-BD1C46696CE5}|backend.csproj|solutionrelative:services\\s3service.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F5A75263-518D-4080-861E-BD1C46696CE5}|backend.csproj|c:\\users\\vania\\desktop\\itransition\\courseproject\\backend\\services\\interfaces\\is3service.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F5A75263-518D-4080-861E-BD1C46696CE5}|backend.csproj|solutionrelative:services\\interfaces\\is3service.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F5A75263-518D-4080-861E-BD1C46696CE5}|backend.csproj|c:\\users\\vania\\desktop\\itransition\\courseproject\\backend\\infastructure\\helpers\\awssettings.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F5A75263-518D-4080-861E-BD1C46696CE5}|backend.csproj|solutionrelative:infastructure\\helpers\\awssettings.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F5A75263-518D-4080-861E-BD1C46696CE5}|backend.csproj|c:\\users\\vania\\desktop\\itransition\\courseproject\\backend\\viewmodels\\dtos\\gettemplatedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F5A75263-518D-4080-861E-BD1C46696CE5}|backend.csproj|solutionrelative:viewmodels\\dtos\\gettemplatedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -42,11 +54,11 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 4,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 10,
               "Title": "GetTemplateDto.cs",
               "DocumentMoniker": "C:\\Users\\vania\\Desktop\\Itransition\\CourseProject\\backend\\ViewModels\\DTOs\\GetTemplateDto.cs",
               "RelativeDocumentMoniker": "ViewModels\\DTOs\\GetTemplateDto.cs",
@@ -65,85 +77,121 @@
               "RelativeDocumentMoniker": "Controllers\\TemplatesController.cs",
               "ToolTip": "C:\\Users\\vania\\Desktop\\Itransition\\CourseProject\\backend\\Controllers\\TemplatesController.cs",
               "RelativeToolTip": "Controllers\\TemplatesController.cs",
-              "ViewState": "AgIAAHEAAAAAAAAAAAAAwDQAAAAMAAAAAAAAAA==",
+              "ViewState": "AgIAAFEAAAAAAAAAAADgv2gAAAAWAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-02-23T11:15:32.41Z",
               "IsPinned": true
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 3,
               "Title": "TemplatesRepository.cs",
               "DocumentMoniker": "C:\\Users\\vania\\Desktop\\Itransition\\CourseProject\\backend\\Repositories\\TemplatesRepository.cs",
               "RelativeDocumentMoniker": "Repositories\\TemplatesRepository.cs",
               "ToolTip": "C:\\Users\\vania\\Desktop\\Itransition\\CourseProject\\backend\\Repositories\\TemplatesRepository.cs",
               "RelativeToolTip": "Repositories\\TemplatesRepository.cs",
-              "ViewState": "AgIAAF4AAAAAAAAAAAAcwDAAAAAuAAAAAAAAAA==",
+              "ViewState": "AgIAAIIAAAAAAAAAAADwv5gAAAAtAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-02-23T11:17:19.629Z",
               "IsPinned": true
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "TemplatesService.cs",
               "DocumentMoniker": "C:\\Users\\vania\\Desktop\\Itransition\\CourseProject\\backend\\Services\\TemplatesService.cs",
               "RelativeDocumentMoniker": "Services\\TemplatesService.cs",
               "ToolTip": "C:\\Users\\vania\\Desktop\\Itransition\\CourseProject\\backend\\Services\\TemplatesService.cs",
               "RelativeToolTip": "Services\\TemplatesService.cs",
-              "ViewState": "AgIAACsBAAAAAAAAAAAEwDUBAAAJAAAAAAAAAA==",
+              "ViewState": "AgIAADcBAAAAAAAAAAAmwE4BAAAIAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-02-23T11:26:42.959Z",
-              "IsPinned": true,
+              "IsPinned": true
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "backend.http",
+              "DocumentMoniker": "C:\\Users\\vania\\Desktop\\Itransition\\CourseProject\\backend\\backend.http",
+              "RelativeDocumentMoniker": "backend.http",
+              "ToolTip": "C:\\Users\\vania\\Desktop\\Itransition\\CourseProject\\backend\\backend.http*",
+              "RelativeToolTip": "backend.http*",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAeAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003502|",
+              "WhenOpened": "2025-02-23T19:54:58.986Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 6,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "C:\\Users\\vania\\Desktop\\Itransition\\CourseProject\\backend\\appsettings.json",
+              "RelativeDocumentMoniker": "appsettings.json",
+              "ToolTip": "C:\\Users\\vania\\Desktop\\Itransition\\CourseProject\\backend\\appsettings.json",
+              "RelativeToolTip": "appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABUAAAA6AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-02-23T19:20:45.592Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
               "Title": "ITemplatesRepository.cs",
               "DocumentMoniker": "C:\\Users\\vania\\Desktop\\Itransition\\CourseProject\\backend\\Repositories\\Interfaces\\ITemplatesRepository.cs",
               "RelativeDocumentMoniker": "Repositories\\Interfaces\\ITemplatesRepository.cs",
               "ToolTip": "C:\\Users\\vania\\Desktop\\Itransition\\CourseProject\\backend\\Repositories\\Interfaces\\ITemplatesRepository.cs",
               "RelativeToolTip": "Repositories\\Interfaces\\ITemplatesRepository.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAABAAAAAAAAAA==",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAcwBEAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-23T12:24:49.113Z"
+              "WhenOpened": "2025-02-23T18:44:30.014Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "TagDto.cs",
-              "DocumentMoniker": "C:\\Users\\vania\\Desktop\\Itransition\\CourseProject\\backend\\ViewModels\\DTOs\\TagDto.cs",
-              "RelativeDocumentMoniker": "ViewModels\\DTOs\\TagDto.cs",
-              "ToolTip": "C:\\Users\\vania\\Desktop\\Itransition\\CourseProject\\backend\\ViewModels\\DTOs\\TagDto.cs",
-              "RelativeToolTip": "ViewModels\\DTOs\\TagDto.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAAqAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-23T11:46:18.719Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 5,
               "Title": "ITemplatesService.cs",
               "DocumentMoniker": "C:\\Users\\vania\\Desktop\\Itransition\\CourseProject\\backend\\Services\\Interfaces\\ITemplatesService.cs",
               "RelativeDocumentMoniker": "Services\\Interfaces\\ITemplatesService.cs",
               "ToolTip": "C:\\Users\\vania\\Desktop\\Itransition\\CourseProject\\backend\\Services\\Interfaces\\ITemplatesService.cs",
               "RelativeToolTip": "Services\\Interfaces\\ITemplatesService.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAABAAAAAAAAAA==",
+              "ViewState": "AgIAAAQAAAAAAAAAAAAYwBQAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-23T11:29:45.078Z"
+              "WhenOpened": "2025-02-23T18:42:11.445Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "TemplateDto.cs",
-              "DocumentMoniker": "C:\\Users\\vania\\Desktop\\Itransition\\CourseProject\\backend\\ViewModels\\DTOs\\TemplateDto.cs",
-              "RelativeDocumentMoniker": "ViewModels\\DTOs\\TemplateDto.cs",
-              "ToolTip": "C:\\Users\\vania\\Desktop\\Itransition\\CourseProject\\backend\\ViewModels\\DTOs\\TemplateDto.cs",
-              "RelativeToolTip": "ViewModels\\DTOs\\TemplateDto.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAhAAAAAAAAAA==",
+              "DocumentIndex": 8,
+              "Title": "IS3Service.cs",
+              "DocumentMoniker": "C:\\Users\\vania\\Desktop\\Itransition\\CourseProject\\backend\\Services\\Interfaces\\IS3Service.cs",
+              "RelativeDocumentMoniker": "Services\\Interfaces\\IS3Service.cs",
+              "ToolTip": "C:\\Users\\vania\\Desktop\\Itransition\\CourseProject\\backend\\Services\\Interfaces\\IS3Service.cs",
+              "RelativeToolTip": "Services\\Interfaces\\IS3Service.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAhAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-23T11:24:57.89Z"
+              "WhenOpened": "2025-02-23T18:37:28.149Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "S3Service.cs",
+              "DocumentMoniker": "C:\\Users\\vania\\Desktop\\Itransition\\CourseProject\\backend\\Services\\S3Service.cs",
+              "RelativeDocumentMoniker": "Services\\S3Service.cs",
+              "ToolTip": "C:\\Users\\vania\\Desktop\\Itransition\\CourseProject\\backend\\Services\\S3Service.cs",
+              "RelativeToolTip": "Services\\S3Service.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAzAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-23T18:36:51.162Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "AwsSettings.cs",
+              "DocumentMoniker": "C:\\Users\\vania\\Desktop\\Itransition\\CourseProject\\backend\\Infastructure\\Helpers\\AwsSettings.cs",
+              "RelativeDocumentMoniker": "Infastructure\\Helpers\\AwsSettings.cs",
+              "ToolTip": "C:\\Users\\vania\\Desktop\\Itransition\\CourseProject\\backend\\Infastructure\\Helpers\\AwsSettings.cs",
+              "RelativeToolTip": "Infastructure\\Helpers\\AwsSettings.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-23T18:33:34.844Z"
             }
           ]
         }

@@ -679,6 +679,18 @@
         }
       }
     },
+    "/Templates/tags": {
+      "get": {
+        "tags": [
+          "Templates"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/Templates/{id}/filledForms": {
       "get": {
         "tags": [
@@ -704,6 +716,29 @@
     },
     "/Templates/{id}/results": {
       "get": {
+        "tags": [
+          "Templates"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/Templates/{id}/photo": {
+      "delete": {
         "tags": [
           "Templates"
         ],

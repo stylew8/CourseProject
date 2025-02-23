@@ -44,6 +44,7 @@ export const useQuestions = (initialQuestions = []) => {
         }
     };
 
+    
     const addOptionToQuestion = (questionIndex) => {
         const updatedQuestions = [...questions];
         if(updatedQuestions[questionIndex]?.options?.length < 4) {
@@ -56,7 +57,15 @@ export const useQuestions = (initialQuestions = []) => {
             setQuestions(updatedQuestions);
         }
     };
-
+    
+    const updateOptions = (questionIndex, updatedOptions) => {
+        const updatedQuestions = [...questions];
+        if (updatedQuestions[questionIndex]) {
+            updatedQuestions[questionIndex].options = updatedOptions;
+            setQuestions(updatedQuestions);
+        }
+    };
+    
     return {
         questions,
         setQuestions,
@@ -65,6 +74,7 @@ export const useQuestions = (initialQuestions = []) => {
         moveQuestion,
         handleQuestionChange,
         handleOptionChange,
-        addOptionToQuestion
+        addOptionToQuestion,
+        updateOptions
     };
 };

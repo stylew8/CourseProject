@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Container, Form, Button, Card, Alert } from 'react-bootstrap';
 import axiosInstance from '../api/axiosInstance';
+import { useLocation } from 'react-router-dom';
 
 const EditFormPage = () => {
     const { formId } = useParams();
@@ -9,13 +10,15 @@ const EditFormPage = () => {
     const [submitError, setSubmitError] = useState('');
     const [submitSuccess, setSubmitSuccess] = useState('');
     const navigate = useNavigate();
-
+    
+    const location = useLocation();
+    const isReadOnly = location.state?.isReadOnly || false;
+    
     useEffect(() => {
         const fetchFormData = async () => {
             try {
                 const response = await axiosInstance.get(`/filledForms/${formId}`);
                 setFormData(response.data);
-                console.log(response.data);
             } catch (error) {
                 console.error('Error fetching form data:', error.response?.data || error.message);
                 setSubmitError('Error loading form data');
@@ -27,6 +30,7 @@ const EditFormPage = () => {
     }, [formId, navigate]);
 
     const handleAnswerChange = (index, value) => {
+        if (isReadOnly) return; 
         setFormData((prev) => ({
             ...prev,
             questions: prev.questions.map((q, i) =>
@@ -36,6 +40,7 @@ const EditFormPage = () => {
     };
 
     const handleCheckboxChange = (index, option, checked) => {
+        if (isReadOnly) return;
         setFormData((prev) => ({
             ...prev,
             questions: prev.questions.map((q, i) => {
@@ -62,10 +67,10 @@ const EditFormPage = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        if (isReadOnly) return; 
         setSubmitError('');
         setSubmitSuccess('');
         try {
-            console.log(formData);
             await axiosInstance.put(`/filledForms/${formId}`, formData);
             setSubmitSuccess('Form updated successfully!');
         } catch (error) {
@@ -79,7 +84,9 @@ const EditFormPage = () => {
     return (
         <Container>
             <Card className="p-4 shadow-sm">
-                <h1 className="mb-4 text-center">Edit Filled Form</h1>
+                <h1 className="mb-4 text-center">
+                    {isReadOnly ? 'View Filled Form' : 'Edit Filled Form'}
+                </h1>
                 {submitError && <Alert variant="danger">{submitError}</Alert>}
                 {submitSuccess && <Alert variant="success">{submitSuccess}</Alert>}
                 <Form onSubmit={handleSubmit}>
@@ -92,6 +99,7 @@ const EditFormPage = () => {
                                     type="text"
                                     value={question.answerValue || ''}
                                     onChange={(e) => handleAnswerChange(index, e.target.value)}
+                                    readOnly={isReadOnly}
                                 />
                             )}
 
@@ -101,6 +109,7 @@ const EditFormPage = () => {
                                     rows={3}
                                     value={question.answerValue || ''}
                                     onChange={(e) => handleAnswerChange(index, e.target.value)}
+                                    readOnly={isReadOnly}
                                 />
                             )}
 
@@ -108,6 +117,7 @@ const EditFormPage = () => {
                                 <Form.Select
                                     value={question.answerValue || ''}
                                     onChange={(e) => handleAnswerChange(index, e.target.value)}
+                                    disabled={isReadOnly}
                                 >
                                     <option value="" disabled>
                                         Select an option
@@ -140,6 +150,7 @@ const EditFormPage = () => {
                                                 onChange={(e) =>
                                                     handleCheckboxChange(index, option, e.target.checked)
                                                 }
+                                                disabled={isReadOnly}
                                             />
                                         );
                                     })}
@@ -147,9 +158,11 @@ const EditFormPage = () => {
                             )}
                         </Form.Group>
                     ))}
-                    <Button type="submit" variant="primary">
-                        Save Changes
-                    </Button>
+                    {!isReadOnly && (
+                        <Button type="submit" variant="primary">
+                            Save Changes
+                        </Button>
+                    )}
                 </Form>
             </Card>
         </Container>

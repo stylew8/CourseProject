@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Linq;
 using Server.Infrastructure.Exceptions;
 using System;
+using backend.Infastructure.Helpers;
 using backend.Repositories.Interfaces;
 using backend.Services.Interfaces;
 
@@ -13,11 +14,13 @@ public class TemplatesService : ITemplatesService
 {
     private readonly ITemplatesRepository _templatesRepository;
     private readonly AppDbContext _context;
+    private readonly IS3Service s3Service;
 
-    public TemplatesService(ITemplatesRepository templatesRepository, AppDbContext context)
+    public TemplatesService(ITemplatesRepository templatesRepository, AppDbContext context, IS3Service s3Service)
     {
         _templatesRepository = templatesRepository;
         _context = context;
+        this.s3Service = s3Service;
     }
 
     public async Task<Template> CreateTemplateAsync(TemplateDto dto, string creatorId, string? photoUrl)
@@ -70,7 +73,7 @@ public class TemplatesService : ITemplatesService
                 }
             }
 
-            if (dto.AccessType?.ToLower() == "private" && dto.AllowedUserIds != null)
+            if (dto.AccessType?.ToLower() == AccessStatusConstants.Private && dto.AllowedUserIds != null)
             {
                 var validUserIds = await _context.Users
                     .Where(u => dto.AllowedUserIds.Contains(u.Id))
@@ -302,6 +305,34 @@ public class TemplatesService : ITemplatesService
 
         _context.Templates.Remove(template);
         await _context.SaveChangesAsync();
+    }
+
+    public async Task DeletePhoto(int templateId)
+    {
+        var template = await _templatesRepository.GetTemplatePhotoAsync(templateId);
+
+        if (template == null) throw new NotFoundException("template was not found");
+
+
+        if (!string.IsNullOrEmpty(template.PhotoUrl))
+        {
+            if (template.PhotoUrl.StartsWith(s3Service.BucketUrlPrefix))
+            {
+                var key = template.PhotoUrl.Substring(s3Service.BucketUrlPrefix.Length);
+
+                await s3Service.DeleteFileAsync(key);
+
+            }
+        }
+
+        await _templatesRepository.DeleteTemplatePhotoAsync(templateId);
+    }
+
+    public async Task<List<string>> GetTagsAsync()
+    {
+        var tags = await _templatesRepository.GetTags();
+
+        return tags;
     }
 
     GetTemplateDto MapTemplateToDto(Template template)

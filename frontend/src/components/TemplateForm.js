@@ -21,8 +21,11 @@ const TemplateForm = ({
     onQuestionChange,
     onOptionChange,
     onOptionAdd,
+    updateOptions,
     onSubmit,
     topicOptions,
+    onDeletePhoto,
+    onSetPhotoDelete
 }) => {
     const {
         title,
@@ -57,11 +60,8 @@ const TemplateForm = ({
         return debouncedLoadTagSuggestions(inputValue);
     };
 
-    const handleDeletePhoto = () => {
-        setFormData({ ...formData, photoUrl: null, photo: null });
-    };
-
     const handleFileChange = (e) => {
+        onSetPhotoDelete(false);
         setFormData({ ...formData, photo: e.target.files[0] });
     };
 
@@ -70,7 +70,7 @@ const TemplateForm = ({
             <Row>
                 <Col md={6}>
                     <Form.Group className="mb-3">
-                        <Form.Label>Form Title *</Form.Label>
+                        <Form.Label className="fw-bold"><span className="text-danger">*</span> Form Title</Form.Label>
                         <Form.Control
                             type="text"
                             value={title}
@@ -85,7 +85,7 @@ const TemplateForm = ({
                     />
 
                     <Form.Group className="mb-3">
-                        <Form.Label>Access Type</Form.Label>
+                        <Form.Label className="fw-bold"><span className="text-danger">*</span> Access Type</Form.Label>
                         <div>
                             <Form.Check
                                 inline
@@ -156,7 +156,7 @@ const TemplateForm = ({
 
                 <Col md={6} >
                     <Form.Group className="mb-3">
-                        <Form.Label>Topic *</Form.Label>
+                        <Form.Label className='fw-bold'><span className="text-danger">*</span> Topic</Form.Label>
                         <Form.Select
                             value={topic}
                             onChange={(e) => setFormData({ ...formData, topic: e.target.value })}
@@ -195,12 +195,12 @@ const TemplateForm = ({
 
                     {photoUrl ? (
                         <div className="mb-3 position-relative">
-                            <Image src={photoUrl} fluid style={{ maxWidth: 200 }} />
+                            <Image src={photoUrl} fluid style={{ maxWidth: 400 }} />
                             <Button
                                 variant="danger"
                                 size="sm"
                                 className="position-absolute top-0 end-0"
-                                onClick={handleDeletePhoto}
+                                onClick={onDeletePhoto}
                             >
                                 ×
                             </Button>
@@ -226,6 +226,7 @@ const TemplateForm = ({
                         question={question}
                         onMove={onQuestionMove}
                         onChange={onQuestionChange}
+                        updateOptions={updateOptions}
                         onOptionChange={onOptionChange}
                         onAddOption={onOptionAdd}
                         onRemove={onQuestionRemove}

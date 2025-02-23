@@ -17,7 +17,8 @@ const CreateTemplatePage = () => {
         moveQuestion,
         handleQuestionChange,
         handleOptionChange,
-        addOptionToQuestion
+        addOptionToQuestion,
+        updateOptions
     } = useQuestions([]);
 
     const [formData, setFormData] = useState({
@@ -127,6 +128,7 @@ const CreateTemplatePage = () => {
                         onQuestionChange={handleQuestionChange}
                         onOptionChange={handleOptionChange}
                         onOptionAdd={addOptionToQuestion}
+                        updateOptions={updateOptions}
                         onSubmit={handleSubmit}
                         topicOptions={topicOptions}
                         tagOptions={tagOptions}

@@ -15,4 +15,7 @@ public interface ITemplatesService
 
     Task<Template?> GetTemplateByIdAsync(string id);
     Task DeleteTemplateAsync(string id);
+
+    Task DeletePhoto(int templateId);
+    Task<List<string>> GetTagsAsync();
 }

@@ -6,7 +6,8 @@ import TemplateForm from '../components/TemplateForm';
 import { getTemplate, updateTemplate } from '../api/templateService';
 import { notifyError } from '../utils/notification';
 import { checkbox, dropdown } from '../utils/questionsTypes';
-import { Education, Other, Quiz, topicOptions} from '../config/options';
+import { Education, Other, Quiz, topicOptions } from '../config/options';
+import axiosInstance from '../api/axiosInstance';
 
 const EditTemplatePage = () => {
     const { templateId } = useParams();
@@ -35,13 +36,14 @@ const EditTemplatePage = () => {
         handleQuestionChange,
         handleOptionChange,
         addOptionToQuestion,
+        updateOptions
     } = useQuestions([]);
 
     useEffect(() => {
         const loadTemplate = async () => {
             try {
                 const data = await getTemplate(templateId);
-    
+
                 const updatedFormData = {
                     ...data,
                     photoUrl: data.photoUrl,
@@ -49,12 +51,12 @@ const EditTemplatePage = () => {
                     tags: data.tags,
                     topic: data.topic,
                 };
-    
+
                 if (data.topic !== Education && data.topic !== Quiz) {
                     updatedFormData.customTopic = data.topic;
                     updatedFormData.topic = Other;
                 }
-    
+
                 setFormData(updatedFormData);
                 setQuestions(data.questions);
                 setIsPhotoDeleted(!data.photoUrl);
@@ -148,9 +150,12 @@ const EditTemplatePage = () => {
         }
     };
 
-    const handleDeletePhoto = () => {
+    const handleDeletePhoto = async () => {
+
         setFormData({ ...formData, photoUrl: null, photo: null });
         setIsPhotoDeleted(true);
+
+        await axiosInstance.delete(`/templates/${parseInt(templateId)}/photo`);
     };
 
     return (
@@ -168,10 +173,12 @@ const EditTemplatePage = () => {
                         onQuestionMove={moveQuestion}
                         onQuestionChange={handleQuestionChange}
                         onOptionChange={handleOptionChange}
+                        updateOptions={updateOptions}
                         onOptionAdd={addOptionToQuestion}
                         onSubmit={handleSubmit}
                         topicOptions={topicOptions}
                         onDeletePhoto={handleDeletePhoto}
+                        onSetPhotoDelete={setIsPhotoDeleted}
                     />
                 </Card.Body>
             </Card>

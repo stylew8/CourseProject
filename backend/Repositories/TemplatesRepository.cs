@@ -1,4 +1,5 @@
-﻿using backend.Repositories.Interfaces;
+﻿using backend.Infastructure.Helpers;
+using backend.Repositories.Interfaces;
 using backend.Repositories.Models;
 using K4os.Hash.xxHash;
 using Microsoft.EntityFrameworkCore;
@@ -73,11 +74,15 @@ public class TemplatesRepository : ITemplatesRepository
 
         _context.TemplateUsers.RemoveRange(template.AllowedUsers);
 
-        template.AllowedUsers = dto.AllowedUserIds.Select(u => new TemplateUser()
+        if (template.AccessType == AccessStatusConstants.Private)
         {
-            TemplateId = template.Id,
-            UserId = u
-        }).ToList();
+            template.AllowedUsers = dto.AllowedUserIds.Select(u => new TemplateUser()
+            {
+                TemplateId = template.Id,
+                UserId = u
+            }).ToList();
+            
+        }
 
         _context.TemplateTags.RemoveRange(template.TemplateTags);
         template.TemplateTags = dto.TagIds.Select(t => new TemplateTag
@@ -107,7 +112,8 @@ public class TemplatesRepository : ITemplatesRepository
     public async Task<List<Template>> GetLatestTemplatesAsync()
     {
         return await _context.Templates
-            .Include(t => t.Questions) 
+            // .Include(t => t.Questions) 
+            .Where(x=>x.AccessType == AccessStatusConstants.Public)
             .OrderByDescending(t => t.Id) 
             .Take(10)
             .ToListAsync();
@@ -120,5 +126,32 @@ public class TemplatesRepository : ITemplatesRepository
             .Include(i=>i.User)
             .Include(f => f.Answers) 
             .ToListAsync();
+    }
+
+    public async Task<Template?> GetTemplatePhotoAsync(int id)
+    {
+        return await _context.Templates.Select(x => new Template()
+            {
+                Id = x.Id,
+                PhotoUrl = x.PhotoUrl
+            })
+            .FirstOrDefaultAsync(x => x.Id == id);
+    }
+
+    public async Task DeleteTemplatePhotoAsync(int id)
+    {
+        var template = await _context.Templates.FirstOrDefaultAsync(x => x.Id == id);
+
+        if (template != null)
+        {
+            template.PhotoUrl = null;
+        }
+
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task<List<string>> GetTags()
+    {
+        return await _context.Tags.Select(x => x.Name).ToListAsync();
     }
 }

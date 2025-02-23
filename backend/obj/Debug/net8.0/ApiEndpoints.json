@@ -362,6 +362,22 @@
   },
   {
     "ContainingType": "backend.Controllers.TemplatesController",
+    "Method": "DeletePhoto",
+    "RelativePath": "Templates/{id}/photo",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "backend.Controllers.TemplatesController",
     "Method": "GetTemplateResults",
     "RelativePath": "Templates/{id}/results",
     "HttpMethod": "GET",
@@ -456,6 +472,16 @@
         "IsRequired": true
       }
     ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "backend.Controllers.TemplatesController",
+    "Method": "GetTags",
+    "RelativePath": "Templates/tags",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
     "ReturnTypes": []
   }
 ]

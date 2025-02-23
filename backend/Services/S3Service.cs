@@ -11,6 +11,8 @@ public class S3Service : IS3Service
     private readonly IAmazonS3 _s3Client;
     private readonly AwsSettings _awsSettings;
     public string BucketName => _awsSettings.BucketName;
+    public string BucketUrlPrefix =>  $"https://{BucketName}.s3.amazonaws.com/";
+
 
     public S3Service(IOptions<AwsSettings> options)
     {
@@ -48,7 +50,7 @@ public class S3Service : IS3Service
             await fileTransferUtility.UploadAsync(uploadRequest);
         }
 
-        return $"https://{_awsSettings.BucketName}.s3.amazonaws.com/{key}";
+        return $"{BucketUrlPrefix}{key}";
     }
 
     public async Task DeleteFileAsync(string fileKey)
