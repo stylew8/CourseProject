@@ -55,8 +55,7 @@
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-02-23T11:23:20.119Z",
-              "IsPinned": true,
-              "EditorCaption": ""
+              "IsPinned": true
             },
             {
               "$type": "Document",
@@ -69,8 +68,7 @@
               "ViewState": "AgIAAHEAAAAAAAAAAAAAwDQAAAAMAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-02-23T11:15:32.41Z",
-              "IsPinned": true,
-              "EditorCaption": ""
+              "IsPinned": true
             },
             {
               "$type": "Document",
@@ -83,8 +81,7 @@
               "ViewState": "AgIAAF4AAAAAAAAAAAAcwDAAAAAuAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-02-23T11:17:19.629Z",
-              "IsPinned": true,
-              "EditorCaption": ""
+              "IsPinned": true
             },
             {
               "$type": "Document",
@@ -94,7 +91,7 @@
               "RelativeDocumentMoniker": "Services\\TemplatesService.cs",
               "ToolTip": "C:\\Users\\vania\\Desktop\\Itransition\\CourseProject\\backend\\Services\\TemplatesService.cs",
               "RelativeToolTip": "Services\\TemplatesService.cs",
-              "ViewState": "AgIAACsBAAAAAAAAAAAEwG4AAAAIAAAAAAAAAA==",
+              "ViewState": "AgIAACsBAAAAAAAAAAAEwDUBAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-02-23T11:26:42.959Z",
               "IsPinned": true,
@@ -146,8 +143,7 @@
               "RelativeToolTip": "ViewModels\\DTOs\\TemplateDto.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAhAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-23T11:24:57.89Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-02-23T11:24:57.89Z"
             }
           ]
         }

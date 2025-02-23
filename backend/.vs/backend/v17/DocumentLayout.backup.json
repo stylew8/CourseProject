@@ -3,20 +3,20 @@
   "WorkspaceRootPath": "C:\\Users\\vania\\Desktop\\Itransition\\CourseProject\\backend\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{F5A75263-518D-4080-861E-BD1C46696CE5}|backend.csproj|c:\\users\\vania\\desktop\\itransition\\courseproject\\backend\\repositories\\templatesrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{F5A75263-518D-4080-861E-BD1C46696CE5}|backend.csproj|solutionrelative:repositories\\templatesrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{F5A75263-518D-4080-861E-BD1C46696CE5}|backend.csproj|c:\\users\\vania\\desktop\\itransition\\courseproject\\backend\\viewmodels\\dtos\\gettemplatedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{F5A75263-518D-4080-861E-BD1C46696CE5}|backend.csproj|solutionrelative:viewmodels\\dtos\\gettemplatedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{F5A75263-518D-4080-861E-BD1C46696CE5}|backend.csproj|c:\\users\\vania\\desktop\\itransition\\courseproject\\backend\\services\\templatesservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{F5A75263-518D-4080-861E-BD1C46696CE5}|backend.csproj|solutionrelative:services\\templatesservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
+      "AbsoluteMoniker": "D:0:0:{F5A75263-518D-4080-861E-BD1C46696CE5}|backend.csproj|c:\\users\\vania\\desktop\\itransition\\courseproject\\backend\\repositories\\templatesrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F5A75263-518D-4080-861E-BD1C46696CE5}|backend.csproj|solutionrelative:repositories\\templatesrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{F5A75263-518D-4080-861E-BD1C46696CE5}|backend.csproj|c:\\users\\vania\\desktop\\itransition\\courseproject\\backend\\controllers\\templatescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{F5A75263-518D-4080-861E-BD1C46696CE5}|backend.csproj|solutionrelative:controllers\\templatescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F5A75263-518D-4080-861E-BD1C46696CE5}|backend.csproj|c:\\users\\vania\\desktop\\itransition\\courseproject\\backend\\viewmodels\\dtos\\gettemplatedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F5A75263-518D-4080-861E-BD1C46696CE5}|backend.csproj|solutionrelative:viewmodels\\dtos\\gettemplatedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{F5A75263-518D-4080-861E-BD1C46696CE5}|backend.csproj|c:\\users\\vania\\desktop\\itransition\\courseproject\\backend\\viewmodels\\dtos\\templatedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -42,11 +42,11 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": 3,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 3,
               "Title": "GetTemplateDto.cs",
               "DocumentMoniker": "C:\\Users\\vania\\Desktop\\Itransition\\CourseProject\\backend\\ViewModels\\DTOs\\GetTemplateDto.cs",
               "RelativeDocumentMoniker": "ViewModels\\DTOs\\GetTemplateDto.cs",
@@ -60,13 +60,13 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 2,
               "Title": "TemplatesController.cs",
               "DocumentMoniker": "C:\\Users\\vania\\Desktop\\Itransition\\CourseProject\\backend\\Controllers\\TemplatesController.cs",
               "RelativeDocumentMoniker": "Controllers\\TemplatesController.cs",
               "ToolTip": "C:\\Users\\vania\\Desktop\\Itransition\\CourseProject\\backend\\Controllers\\TemplatesController.cs",
               "RelativeToolTip": "Controllers\\TemplatesController.cs",
-              "ViewState": "AgIAABwAAAAAAAAAAAAgwDsAAAAMAAAAAAAAAA==",
+              "ViewState": "AgIAAHEAAAAAAAAAAAAAwDQAAAAMAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-02-23T11:15:32.41Z",
               "IsPinned": true,
@@ -74,13 +74,13 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "TemplatesRepository.cs",
               "DocumentMoniker": "C:\\Users\\vania\\Desktop\\Itransition\\CourseProject\\backend\\Repositories\\TemplatesRepository.cs",
               "RelativeDocumentMoniker": "Repositories\\TemplatesRepository.cs",
               "ToolTip": "C:\\Users\\vania\\Desktop\\Itransition\\CourseProject\\backend\\Repositories\\TemplatesRepository.cs",
               "RelativeToolTip": "Repositories\\TemplatesRepository.cs",
-              "ViewState": "AgIAABkAAAAAAAAAAAAuwDAAAAAuAAAAAAAAAA==",
+              "ViewState": "AgIAAF4AAAAAAAAAAAAcwDAAAAAuAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-02-23T11:17:19.629Z",
               "IsPinned": true,
@@ -88,13 +88,13 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 0,
               "Title": "TemplatesService.cs",
               "DocumentMoniker": "C:\\Users\\vania\\Desktop\\Itransition\\CourseProject\\backend\\Services\\TemplatesService.cs",
               "RelativeDocumentMoniker": "Services\\TemplatesService.cs",
               "ToolTip": "C:\\Users\\vania\\Desktop\\Itransition\\CourseProject\\backend\\Services\\TemplatesService.cs",
               "RelativeToolTip": "Services\\TemplatesService.cs",
-              "ViewState": "AgIAAE8AAAAAAAAAAAAjwG4AAAAIAAAAAAAAAA==",
+              "ViewState": "AgIAACsBAAAAAAAAAAAEwG4AAAAIAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-02-23T11:26:42.959Z",
               "IsPinned": true,
