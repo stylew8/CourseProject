@@ -1,6 +1,7 @@
 import React from 'react';
 import { Card, Button } from 'react-bootstrap';
 import { deleteTemplate } from '../api/templateService';
+import MarkdownPreviewComponent from './MarkdownPreview';
 
 const TemplateCard = ({ template, isDashboard = false }) => {
     const onDelete = async () => {
@@ -17,7 +18,7 @@ const TemplateCard = ({ template, isDashboard = false }) => {
         <Card className="mb-3">
             <Card.Body>
                 <Card.Title>{template.title}</Card.Title>
-                <Card.Text>{template.description}</Card.Text>
+                <MarkdownPreviewComponent markdownText={template.description} />
                 <Button variant="primary" href={`/template/${template.id}`}>
                     View Template
                 </Button>

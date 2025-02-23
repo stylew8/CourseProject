@@ -6,7 +6,7 @@ import TemplateForm from '../components/TemplateForm';
 import { getTemplate, updateTemplate } from '../api/templateService';
 import { notifyError } from '../utils/notification';
 import { checkbox, dropdown } from '../utils/questionsTypes';
-import { topicOptions, tagOptions, userOptions } from '../config/options';
+import { Education, Other, Quiz, topicOptions} from '../config/options';
 
 const EditTemplatePage = () => {
     const { templateId } = useParams();
@@ -41,10 +41,21 @@ const EditTemplatePage = () => {
         const loadTemplate = async () => {
             try {
                 const data = await getTemplate(templateId);
-                setFormData({
+    
+                const updatedFormData = {
                     ...data,
-                    photoUrl: data.photoUrl
-                });
+                    photoUrl: data.photoUrl,
+                    selectedUsers: data.allowedUsers,
+                    tags: data.tags,
+                    topic: data.topic,
+                };
+    
+                if (data.topic !== Education && data.topic !== Quiz) {
+                    updatedFormData.customTopic = data.topic;
+                    updatedFormData.topic = Other;
+                }
+    
+                setFormData(updatedFormData);
                 setQuestions(data.questions);
                 setIsPhotoDeleted(!data.photoUrl);
             } catch (error) {
@@ -52,7 +63,8 @@ const EditTemplatePage = () => {
             }
         };
         loadTemplate();
-    }, [templateId, setQuestions]);
+    }, [setQuestions, templateId]);
+
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -109,7 +121,7 @@ const EditTemplatePage = () => {
 
         if (formData.tags.length > 0) {
             formPayload.append('tagIds', JSON.stringify(
-                formData.tags.map(tag => tag.value)
+                formData.tags.map(tag => parseInt(tag.value))
             ));
         }
 
@@ -159,8 +171,6 @@ const EditTemplatePage = () => {
                         onOptionAdd={addOptionToQuestion}
                         onSubmit={handleSubmit}
                         topicOptions={topicOptions}
-                        tagOptions={tagOptions}
-                        userOptions={userOptions}
                         onDeletePhoto={handleDeletePhoto}
                     />
                 </Card.Body>

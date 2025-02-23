@@ -183,7 +183,7 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "SearchController",
+    "ContainingType": "backend.Controllers.SearchController",
     "Method": "SearchTags",
     "RelativePath": "Search/tags",
     "HttpMethod": "GET",
@@ -199,7 +199,23 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "SearchController",
+    "ContainingType": "backend.Controllers.SearchController",
+    "Method": "ValidateUser",
+    "RelativePath": "Search/user/validate",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "backend.Controllers.ValidateUserRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "backend.Controllers.SearchController",
     "Method": "SearchUsers",
     "RelativePath": "Search/users",
     "HttpMethod": "GET",

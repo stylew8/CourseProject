@@ -6,7 +6,7 @@ namespace backend.Services.Interfaces;
 public interface ITemplatesService
 {
     Task<Template> CreateTemplateAsync(TemplateDto dto, string creatorId, string? photoUrl);
-    Task<Template?> GetTemplateFullAsync(int id);
+    Task<GetTemplateDto?> GetTemplateFullAsync(int id);
     Task<Template> UpdateTemplateAsync(int id, TemplateDto dto, string photoUrl);
     Task<int> SubmitFormAsync(int templateId, SubmitFormDto dto, string userId);
     Task<List<Template>> GetLatestTemplatesAsync();

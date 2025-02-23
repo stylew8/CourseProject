@@ -1,8 +1,9 @@
-import React, { useCallback, useState } from 'react';
-import { Form, Button, Row, Col, Image, ButtonGroup } from 'react-bootstrap';
+import React, { useState } from 'react';
+import { Form, Button, Row, Col, Image } from 'react-bootstrap';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import Select from 'react-select';
+import AsyncSelect from 'react-select/async';
+import AsyncCreatableSelect from 'react-select/async-creatable';
 import debounce from 'lodash.debounce';
 import axiosInstance from '../api/axiosInstance';
 import { notifyError } from '../utils/notification';
@@ -34,66 +35,26 @@ const TemplateForm = ({
         photoUrl
     } = formData;
 
-    const [userSort, setUserSort] = useState('name');
+    const [inputValue, setInputValue] = useState('');
 
-    const sortedUsers = [...selectedUsers].sort((a, b) =>
-        userSort === 'name'
-            ? a.name.localeCompare(b.userName)
-            : a.email.localeCompare(b.email)
-    );
-
-    const loadTagSuggestions = useCallback(
-        debounce(async (inputValue) => {
-            try {
-                const response = await axiosInstance.get(`/search/tags?query=${inputValue}`);
-                return response.data.map(tag => ({
-                    value: tag.id,
-                    label: tag.name,
-                }));
-            } catch (error) {
-                notifyError('Failed to load tags');
-                return [];
-            }
-        }, 300),
-        []
-    );
-
-    const loadUserSuggestions = useCallback(
-        debounce(async (inputValue) => {
-            try {
-                const response = await axiosInstance.get(`/search/users?query=${inputValue}`);
-                return response.data.map(user => ({
-                    value: user.id,
-                    label: `${user.email}`,
-                    name: user.userName,
-                    email: user.email
-                }));
-            } catch (error) {
-                notifyError('Failed to load users');
-                return [];
-            }
-        }, 300),
-        []
-    );
-
-    const handleUserChange = async (selected) => {
-        try {
-            const response = await axiosInstance.post('/search/users/validate', {
-                ids: selected.map(u => u.value)
-            });
-
-            if (response.data.invalidIds?.length > 0) {
-                notifyError('Some users are invalid');
-                return;
-            }
-
-            setFormData({
-                ...formData,
-                selectedUsers: selected
-            });
-        } catch (error) {
-            notifyError('User validation failed');
+    const debouncedLoadTagSuggestions = debounce(async (inputValue) => {
+        if (!inputValue || inputValue.trim() === '') {
+            return [];
         }
+        try {
+            const response = await axiosInstance.get(`/search/tags?query=${inputValue}`);
+            return response.data.map(tag => ({
+                value: tag.id,
+                label: tag.name,
+            }));
+        } catch (error) {
+            notifyError('Failed to load tags');
+            return [];
+        }
+    }, 300);
+
+    const loadTagSuggestions = (inputValue) => {
+        return debouncedLoadTagSuggestions(inputValue);
     };
 
     const handleDeletePhoto = () => {
@@ -144,20 +105,52 @@ const TemplateForm = ({
                     </Form.Group>
 
                     {accessType === 'private' && (
-                        <>
-                            <Form.Group className="mb-3">
-                                <Form.Label>Select Users</Form.Label>
-                                <Select
-                                    isMulti
-                                    cacheOptions
-                                    defaultOptions
-                                    loadOptions={loadUserSuggestions}
-                                    value={sortedUsers}
-                                    onChange={handleUserChange}
-                                    placeholder="Search by name or email..."
-                                />
-                            </Form.Group>
-                        </>
+                        <Form.Group className="mb-3">
+                            <Form.Label>Select Users</Form.Label>
+                            <AsyncCreatableSelect
+                                isMulti
+                                cacheOptions
+                                defaultOptions
+                                menuIsOpen={false}
+                                inputValue={inputValue}
+                                onInputChange={(value) => setInputValue(value)}
+                                onKeyDown={async (event) => {
+                                    if (event.key === 'Enter' && inputValue.trim()) {
+                                        event.preventDefault();
+                                        try {
+                                            const response = await axiosInstance.post('/search/user/validate', {
+                                                email: inputValue.trim()
+                                            });
+
+                                            if (response.data && response.data.user) {
+                                                const user = response.data.user;
+                                                const newUser = {
+                                                    value: user.id,
+                                                    label: user.email,
+                                                    email: user.email,
+                                                    name: user.userName,
+                                                };
+
+                                                setFormData({
+                                                    ...formData,
+                                                    selectedUsers: [...selectedUsers, newUser]
+                                                });
+                                                setInputValue('');
+                                            } else {
+                                                notifyError('User with that email was not found');
+                                            }
+                                        } catch (error) {
+                                            notifyError('User with that email was not found');
+                                        }
+                                    }
+                                }}
+                                value={selectedUsers} 
+                                onChange={(newValue) =>
+                                    setFormData({ ...formData, selectedUsers: newValue })
+                                }
+                                placeholder="Enter email and press Enter..."
+                            />
+                        </Form.Group>
                     )}
                 </Col>
 
@@ -189,7 +182,7 @@ const TemplateForm = ({
 
                     <Form.Group className="mb-3">
                         <Form.Label>Tags</Form.Label>
-                        <Select
+                        <AsyncSelect
                             isMulti
                             cacheOptions
                             defaultOptions
@@ -200,7 +193,7 @@ const TemplateForm = ({
                         />
                     </Form.Group>
 
-                    {photoUrl && (
+                    {photoUrl ? (
                         <div className="mb-3 position-relative">
                             <Image src={photoUrl} fluid style={{ maxWidth: 200 }} />
                             <Button
@@ -212,16 +205,15 @@ const TemplateForm = ({
                                 ×
                             </Button>
                         </div>
-                    )}
-
-                    <Form.Group className="mb-3">
-                        <Form.Label>{mode === 'create' ? 'Upload Photo' : 'Update Photo'}</Form.Label>
-                        <Form.Control
-                            type="file"
-                            accept="image/*"
-                            onChange={handleFileChange}
-                        />
-                    </Form.Group>
+                    ) : (
+                        <Form.Group className="mb-3">
+                            <Form.Label>{mode === 'create' ? 'Upload Photo' : 'Update Photo'}</Form.Label>
+                            <Form.Control
+                                type="file"
+                                accept="image/*"
+                                onChange={handleFileChange}
+                            />
+                        </Form.Group>)}
                 </Col>
             </Row>
 

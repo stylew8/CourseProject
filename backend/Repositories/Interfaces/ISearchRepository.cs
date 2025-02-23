@@ -7,4 +7,6 @@ public interface ISearchRepository
 {
     Task<List<Tag>> SearchTagsAsync(string query);
     Task<List<IdentityUser>> SearchUsersAsync(string query);
+    Task<IdentityUser> SearchUserAsync(string email);
+    
 }

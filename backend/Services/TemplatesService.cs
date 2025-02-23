@@ -112,10 +112,13 @@ public class TemplatesService : ITemplatesService
         return template;
     }
 
-    public async Task<Template?> GetTemplateFullAsync(int id)
+    public async Task<GetTemplateDto?> GetTemplateFullAsync(int id)
     {
         var template = await _templatesRepository.GetTemplateByIdFullAsync(id);
-        return template;
+        if (template == null)
+            return null;
+
+        return MapTemplateToDto(template);
     }
 
     public async Task<int> SubmitFormAsync(int templateId, SubmitFormDto dto, string userId)
@@ -299,6 +302,46 @@ public class TemplatesService : ITemplatesService
 
         _context.Templates.Remove(template);
         await _context.SaveChangesAsync();
+    }
+
+    GetTemplateDto MapTemplateToDto(Template template)
+    {
+        return new GetTemplateDto
+        {
+            Id = template.Id,
+            Title = template.Title,
+            Description = template.Description,
+            PhotoUrl = template.PhotoUrl,
+            AccessType = template.AccessType,
+            TopicId = template.TopicId,
+            Topic = template.Topic.Name,
+            CreatorId = template.CreatorId,
+            Questions = template.Questions.Select(q => new QuestionDto
+            {
+                Id = q.Id,
+                Order = q.Order,
+                Type = q.Type,
+                Text = q.Text,
+                Description = q.Description,
+                ShowInTable = q.ShowInTable,
+                Options = q.Options.Select(oo=>new OptionDto()
+                {
+                    Id = oo.Id,
+                    Order = oo.Order,
+                    Value = oo.Value
+                }).ToList()
+            }).ToList(),
+            Tags = template.TemplateTags.Select(tt => new GetSelectDto()
+            {
+                Value = tt.TagId.ToString(),
+                Label = tt.Tag != null ? tt.Tag.Name : string.Empty
+            }).ToList(),
+            AllowedUsers = template.AllowedUsers.Select(au => new GetSelectDto()
+            {
+                Value = au.UserId,
+                Label = au.User != null ? au.User.Email : string.Empty,
+            }).ToList()
+        };
     }
 
 }

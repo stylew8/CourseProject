@@ -28,5 +28,11 @@ public class SearchRepository : ISearchRepository
             .ToListAsync();
     }
 
+    public async Task<IdentityUser> SearchUserAsync(string email)
+    {
+        var user = await _context.Users
+            .FirstOrDefaultAsync(u => u.Email.ToLower() == email);
 
+        return user;
+    }
 }

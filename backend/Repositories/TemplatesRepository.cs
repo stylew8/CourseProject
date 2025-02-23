@@ -26,13 +26,30 @@ public class TemplatesRepository : ITemplatesRepository
         return await _context.Templates
             .Include(t => t.Questions)
             .ThenInclude(q => q.Options)
+            .Include(x=>x.AllowedUsers)
+            .ThenInclude(x=>x.User)
+            .Include(x=>x.TemplateTags)
+            .ThenInclude(x=>x.Tag)
+            .Include(x=>x.Topic)
             .FirstOrDefaultAsync(t => t.Id == id);
     }
-
     public async Task<Template> UpdateTemplateAsync(Template template, TemplateDto dto, bool removeOldQuestions = true)
     {
         template.Title = dto.Title;
         template.Description = dto.Description;
+        template.AccessType = dto.AccessType;
+
+        var topic = await _context.Topics.FirstOrDefaultAsync(x=>x.Name == dto.Topic);
+        if (topic == null)
+        {
+            topic = (await _context.Topics.AddAsync(new Topic()
+            {
+                Name = dto.Topic
+            })).Entity;
+            await _context.SaveChangesAsync();
+        }
+
+        template.TopicId = topic.Id;
 
         if (removeOldQuestions)
         {
@@ -45,7 +62,6 @@ public class TemplatesRepository : ITemplatesRepository
             Order = q.Order,
             Type = q.Type,
             Text = q.Text,
-
             Description = q.Description,
             ShowInTable = q.ShowInTable,
             Options = q.Options.Select(o => new Option
@@ -53,6 +69,21 @@ public class TemplatesRepository : ITemplatesRepository
                 Order = o.Order,
                 Value = o.Value
             }).ToList()
+        }).ToList();
+
+        _context.TemplateUsers.RemoveRange(template.AllowedUsers);
+
+        template.AllowedUsers = dto.AllowedUserIds.Select(u => new TemplateUser()
+        {
+            TemplateId = template.Id,
+            UserId = u
+        }).ToList();
+
+        _context.TemplateTags.RemoveRange(template.TemplateTags);
+        template.TemplateTags = dto.TagIds.Select(t => new TemplateTag
+        {
+            TemplateId = template.Id,
+            TagId = t
         }).ToList();
 
         await _context.SaveChangesAsync();

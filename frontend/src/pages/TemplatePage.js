@@ -29,6 +29,8 @@ const TemplatePage = () => {
                 const responseTemplate = await axiosInstance.get(`/templates/public/${id}`);
                 setTemplate(responseTemplate.data);
 
+                console.log(responseTemplate.data);
+
                 const responseFilledForms = await axiosInstance.get(`/templates/${id}/filledForms`);
                 setFilledForms(responseFilledForms.data);
                 console.log(responseFilledForms.data);
@@ -85,7 +87,6 @@ const TemplatePage = () => {
     return (
         <Container className="mt-4">
             <h1>{template.title}</h1>
-            <p>{template.description}</p>
             <Tabs defaultActiveKey="general" id="template-tabs" className="mb-3">
                 <Tab eventKey="general" title="General">
                     <GeneralSettings template={template} />

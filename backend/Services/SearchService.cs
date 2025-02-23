@@ -1,6 +1,7 @@
 ﻿using backend.Repositories.Interfaces;
 using backend.Services.Interfaces;
 using backend.ViewModels.DTOs;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace backend.Services;
@@ -31,4 +32,15 @@ public class SearchService : ISearchService
         }).ToList();
     }
 
+    public async Task<IdentityUser?> ValidateUserEmail(string email)
+    {
+        if (string.IsNullOrWhiteSpace(email))
+            return null;
+
+        var normalizedEmail = email.Trim().ToLower();
+
+        var user = await _searchRepository.SearchUserAsync(normalizedEmail);
+
+        return user;
+    }
 }
