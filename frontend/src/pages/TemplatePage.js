@@ -43,7 +43,6 @@ const TemplatePage = () => {
                 setTemplate(responseTemplate.data);
                 const responseFilledForms = await axiosInstance.get(`/templates/${id}/filledForms`);
                 setFilledForms(responseFilledForms.data);
-                console.log(responseFilledForms.data);
 
                 const responseResults = await axiosInstance.get(`/templates/${id}/results`);
                 setAggregationResults(responseResults.data);

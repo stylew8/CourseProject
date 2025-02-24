@@ -61,7 +61,7 @@ const EditTemplatePage = () => {
                 setQuestions(data.questions);
                 setIsPhotoDeleted(!data.photoUrl);
             } catch (error) {
-                console.error('Loading failed:', error);
+                console.error('Loading failed:');
             }
         };
         loadTemplate();
@@ -145,7 +145,7 @@ const EditTemplatePage = () => {
             await updateTemplate(templateId, formPayload);
             navigate(`/template/${templateId}`);
         } catch (error) {
-            console.error('Template update error:', error);
+            console.error('Template update error:');
             notifyError(error.response?.data?.message || 'Failed to update template');
         }
     };
