@@ -3,13 +3,22 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/main/VisualStudio.gitignore
 
-appsettings.json
+# Игнорировать пользовательские файлы конфигурации, содержащие секреты
+**/appsettings.json
+**/appsettings.*.json
 # User-specific files
 *.rsuser
 *.suo
 *.user
 *.userosscache
 *.sln.docstates
+
+**/bin/
+**/obj/
+**/appsettings.json
+**/appsettings.*.json
+!**/appsettings.example.json
+
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
