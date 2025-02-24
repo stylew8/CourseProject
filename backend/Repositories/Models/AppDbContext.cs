@@ -22,11 +22,13 @@ namespace backend.Repositories.Models
         public DbSet<TemplateUser> TemplateUsers { get; set; }
         public DbSet<Like> Likes { get; set; }
         public DbSet<Comment> Comments { get; set; }
-
+        public DbSet<CountResult> CountResults { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+
+            builder.Entity<CountResult>().HasNoKey();
 
             builder.Entity<UserInformation>()
                 .HasOne(ui => ui.User)

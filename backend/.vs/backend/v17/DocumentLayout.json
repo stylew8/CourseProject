@@ -7,6 +7,14 @@
       "RelativeMoniker": "D:0:0:{F5A75263-518D-4080-861E-BD1C46696CE5}|backend.csproj|solutionrelative:services\\templatesearchservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
+      "AbsoluteMoniker": "D:0:0:{F5A75263-518D-4080-861E-BD1C46696CE5}|backend.csproj|c:\\users\\vania\\desktop\\itransition\\courseproject\\backend\\repositories\\models\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F5A75263-518D-4080-861E-BD1C46696CE5}|backend.csproj|solutionrelative:repositories\\models\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F5A75263-518D-4080-861E-BD1C46696CE5}|backend.csproj|c:\\users\\vania\\desktop\\itransition\\courseproject\\backend\\repositories\\models\\countresult.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F5A75263-518D-4080-861E-BD1C46696CE5}|backend.csproj|solutionrelative:repositories\\models\\countresult.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{F5A75263-518D-4080-861E-BD1C46696CE5}|backend.csproj|c:\\users\\vania\\desktop\\itransition\\courseproject\\backend\\controllers\\searchcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{F5A75263-518D-4080-861E-BD1C46696CE5}|backend.csproj|solutionrelative:controllers\\searchcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -26,8 +34,34 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 2,
           "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "AppDbContext.cs",
+              "DocumentMoniker": "C:\\Users\\vania\\Desktop\\Itransition\\CourseProject\\backend\\Repositories\\Models\\AppDbContext.cs",
+              "RelativeDocumentMoniker": "Repositories\\Models\\AppDbContext.cs",
+              "ToolTip": "C:\\Users\\vania\\Desktop\\Itransition\\CourseProject\\backend\\Repositories\\Models\\AppDbContext.cs",
+              "RelativeToolTip": "Repositories\\Models\\AppDbContext.cs",
+              "ViewState": "AgIAAAsAAAAAAAAAAADgvxQAAAA8AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-24T01:42:51.841Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "CountResult.cs",
+              "DocumentMoniker": "C:\\Users\\vania\\Desktop\\Itransition\\CourseProject\\backend\\Repositories\\Models\\CountResult.cs",
+              "RelativeDocumentMoniker": "Repositories\\Models\\CountResult.cs",
+              "ToolTip": "C:\\Users\\vania\\Desktop\\Itransition\\CourseProject\\backend\\Repositories\\Models\\CountResult.cs",
+              "RelativeToolTip": "Repositories\\Models\\CountResult.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAnAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-24T01:38:11.161Z",
+              "EditorCaption": ""
+            },
             {
               "$type": "Document",
               "DocumentIndex": 0,
@@ -36,14 +70,14 @@
               "RelativeDocumentMoniker": "Services\\TemplateSearchService.cs",
               "ToolTip": "C:\\Users\\vania\\Desktop\\Itransition\\CourseProject\\backend\\Services\\TemplateSearchService.cs",
               "RelativeToolTip": "Services\\TemplateSearchService.cs",
-              "ViewState": "AgIAADkAAAAAAAAAAAAkwEQAAAAcAAAAAAAAAA==",
+              "ViewState": "AgIAAA0AAAAAAAAAAAAAwDAAAAAjAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-02-24T00:20:59.753Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 4,
               "Title": "ITemplateSearchService.cs",
               "DocumentMoniker": "C:\\Users\\vania\\Desktop\\Itransition\\CourseProject\\backend\\Services\\Interfaces\\ITemplateSearchService.cs",
               "RelativeDocumentMoniker": "Services\\Interfaces\\ITemplateSearchService.cs",
@@ -55,7 +89,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 5,
               "Title": "SearchResult.cs",
               "DocumentMoniker": "C:\\Users\\vania\\Desktop\\Itransition\\CourseProject\\backend\\ViewModels\\SearchResult.cs",
               "RelativeDocumentMoniker": "ViewModels\\SearchResult.cs",
@@ -67,7 +101,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 3,
               "Title": "SearchController.cs",
               "DocumentMoniker": "C:\\Users\\vania\\Desktop\\Itransition\\CourseProject\\backend\\Controllers\\SearchController.cs",
               "RelativeDocumentMoniker": "Controllers\\SearchController.cs",
