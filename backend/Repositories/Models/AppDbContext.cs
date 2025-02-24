@@ -20,6 +20,8 @@ namespace backend.Repositories.Models
         public DbSet<Tag> Tags { get; set; }
         public DbSet<TemplateTag> TemplateTags { get; set; }
         public DbSet<TemplateUser> TemplateUsers { get; set; }
+        public DbSet<Like> Likes { get; set; }
+        public DbSet<Comment> Comments { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder builder)

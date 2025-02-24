@@ -19,6 +19,7 @@
           "Microsoft.EntityFrameworkCore.Relational": "8.0.13",
           "Microsoft.EntityFrameworkCore.Tools": "8.0.13",
           "MySql.EntityFrameworkCore": "8.0.11",
+          "NEST": "7.17.4",
           "Newtonsoft.Json": "13.0.3",
           "Swashbuckle.AspNetCore": "6.6.2",
           "System.IdentityModel.Tokens.Jwt": "8.4.0"
@@ -65,6 +66,19 @@
           "lib/net6.0/BouncyCastle.Cryptography.dll": {
             "assemblyVersion": "2.0.0.0",
             "fileVersion": "2.3.1.17862"
+          }
+        }
+      },
+      "Elasticsearch.Net/7.17.4": {
+        "dependencies": {
+          "Microsoft.CSharp": "4.6.0",
+          "System.Buffers": "4.5.1",
+          "System.Diagnostics.DiagnosticSource": "8.0.1"
+        },
+        "runtime": {
+          "lib/netstandard2.1/Elasticsearch.Net.dll": {
+            "assemblyVersion": "7.0.0.0",
+            "fileVersion": "7.17.4.0"
           }
         }
       },
@@ -392,6 +406,7 @@
           }
         }
       },
+      "Microsoft.CSharp/4.6.0": {},
       "Microsoft.EntityFrameworkCore/8.0.13": {
         "dependencies": {
           "Microsoft.EntityFrameworkCore.Abstractions": "8.0.13",
@@ -711,6 +726,17 @@
           "lib/net8.0/MySql.EntityFrameworkCore.dll": {
             "assemblyVersion": "8.0.11.0",
             "fileVersion": "8.0.11.0"
+          }
+        }
+      },
+      "NEST/7.17.4": {
+        "dependencies": {
+          "Elasticsearch.Net": "7.17.4"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Nest.dll": {
+            "assemblyVersion": "7.0.0.0",
+            "fileVersion": "7.17.4.0"
           }
         }
       },
@@ -1036,6 +1062,13 @@
       "path": "bouncycastle.cryptography/2.3.1",
       "hashPath": "bouncycastle.cryptography.2.3.1.nupkg.sha512"
     },
+    "Elasticsearch.Net/7.17.4": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-5SIkngYAzsHhLLaj9fSmoTAZXARkKLUbvSzSdtZiNRdDxVPQjJgCT2q1FaSyTqRsWhh5zS5yhUUTL/CIKv2irA==",
+      "path": "elasticsearch.net/7.17.4",
+      "hashPath": "elasticsearch.net.7.17.4.nupkg.sha512"
+    },
     "Google.Protobuf/3.26.1": {
       "type": "package",
       "serviceable": true,
@@ -1147,6 +1180,13 @@
       "sha512": "sha512-l4dDRmGELXG72XZaonnOeORyD/T5RpEu5LGHOUIhnv+MmUWDY/m1kWXGwtcgQ5CJ5ynkFiRnIYzTKXYjUs7rbw==",
       "path": "microsoft.codeanalysis.workspaces.common/4.5.0",
       "hashPath": "microsoft.codeanalysis.workspaces.common.4.5.0.nupkg.sha512"
+    },
+    "Microsoft.CSharp/4.6.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-kxn3M2rnAGy5N5DgcIwcE8QTePWU/XiYcQVzn9HqTls2NKluVzVSmVWRjK7OUPWbljCXuZxHyhEz9kPRIQeXow==",
+      "path": "microsoft.csharp/4.6.0",
+      "hashPath": "microsoft.csharp.4.6.0.nupkg.sha512"
     },
     "Microsoft.EntityFrameworkCore/8.0.13": {
       "type": "package",
@@ -1364,6 +1404,13 @@
       "sha512": "sha512-b7yC/6J+F1Kr8XOAFdY4+xC72qicVxIA0mR+FbX0UlmzNKZe7jpTADBY3BMP9xnNX9Fb+0iW0yRbMBW+qbi+YQ==",
       "path": "mysql.entityframeworkcore/8.0.11",
       "hashPath": "mysql.entityframeworkcore.8.0.11.nupkg.sha512"
+    },
+    "NEST/7.17.4": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-FFz357NTG4P+4cnclVZ4I7bpZp0oNYZ3Dk88IzZ2NEttaxzFSI7+C7yF93y9Jg5myNwiStI+/tppwNut8M85Lw==",
+      "path": "nest/7.17.4",
+      "hashPath": "nest.7.17.4.nupkg.sha512"
     },
     "Newtonsoft.Json/13.0.3": {
       "type": "package",

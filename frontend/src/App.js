@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Link, Navigate } from 'react-ro
 import { Container, Navbar, Nav } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
+import HeaderSearch from './components/Search/HeaderSearch';
 import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
@@ -21,6 +22,7 @@ import { AuthContext } from './context/AuthContext';
 import PublicRoute from './components/PublicRoute';
 import { Admin } from './api/roles';
 import './App.css';
+import SearchPage from './pages/SearchPage';
 
 function App() {
     const { isAuthenticated, logout, roles } = useContext(AuthContext);
@@ -53,6 +55,7 @@ function App() {
                         </Nav>
                             <ThemeSwitcher />
                         <Nav className='mx-5'>
+                                <HeaderSearch />
                                 {isAuthenticated ? (
                                     <Nav.Link onClick={logout} className="text-danger">
                                         Logout
@@ -83,6 +86,7 @@ function App() {
                     <Route path="/create-template" element={<ProtectedRoute component={CreateTemplatePage} />} />
                     <Route path="/edit-form/:formId" element={<ProtectedRoute component={EditFormPage} />} />
                     <Route path="/edit-template/:templateId" element={<ProtectedRoute component={EditTemplatePage} />} />
+                    <Route path="/search" element={<SearchPage />} />
                     <Route path="*" element={<Navigate to="/" replace />} />
                 </Routes>
             </Container>

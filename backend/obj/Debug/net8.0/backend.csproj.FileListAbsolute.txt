@@ -151,3 +151,5 @@ C:\Users\vania\Desktop\Itransition\CourseProject\backend\obj\Debug\net8.0\ref\ba
 C:\Users\vania\Desktop\Itransition\CourseProject\backend\bin\Debug\net8.0\AWSSDK.Core.dll
 C:\Users\vania\Desktop\Itransition\CourseProject\backend\bin\Debug\net8.0\AWSSDK.Extensions.NETCore.Setup.dll
 C:\Users\vania\Desktop\Itransition\CourseProject\backend\bin\Debug\net8.0\AWSSDK.S3.dll
+C:\Users\vania\Desktop\Itransition\CourseProject\backend\bin\Debug\net8.0\Elasticsearch.Net.dll
+C:\Users\vania\Desktop\Itransition\CourseProject\backend\bin\Debug\net8.0\Nest.dll

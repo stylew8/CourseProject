@@ -15,6 +15,7 @@ using backend.Repositories.Interfaces;
 using backend.Services.Interfaces;
 using Amazon.S3;
 using backend.Infastructure.Helpers;
+using Nest;
 
 
 namespace backend
@@ -70,6 +71,12 @@ namespace backend
             services.AddScoped<IAdminService, AdminService>();
             services.AddScoped<ISearchRepository, SearchRepository>();
             services.AddScoped<ISearchService, SearchService>();
+            services.AddScoped<ICommentRepository, CommentRepository>();
+            services.AddScoped<ILikeRepository, LikeRepository>();
+            services.AddScoped<ICommentService, CommentService>();
+            services.AddScoped<ILikeService, LikeService>();
+
+            services.AddScoped<ITemplateSearchService, TemplateSearchService>();
 
             var awsOptions = configuration.GetAWSOptions();
             services.AddDefaultAWSOptions(awsOptions);
@@ -80,7 +87,7 @@ namespace backend
             services.AddCors(options =>
             {
                 options.AddPolicy("AllowAll", builder =>
-                    builder.WithOrigins("http://localhost:3000", "https://tkti.lt", "https://uniqum.school")
+                    builder.WithOrigins(configuration.GetValue<string>("Cors:DefaultUri") ?? "")
                             .AllowAnyMethod()
                             .AllowAnyHeader()
                             .AllowCredentials());
@@ -114,7 +121,7 @@ namespace backend
                     ValidateIssuerSigningKey = true,
                     ValidIssuer = configuration["JWT:Issuer"],
                     ValidAudience = configuration["JWT:Audience"],
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Key"]))
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Key"] ?? ""))
                 };
             });
 

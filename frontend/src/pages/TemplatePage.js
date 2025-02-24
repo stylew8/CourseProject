@@ -11,6 +11,7 @@ import AggregationResults from '../components/AggregationResults';
 import FillForm from '../components/FillForm';
 import { Admin } from '../api/roles';
 import { notifyError, notifySuccess } from '../utils/notification';
+import Comments from '../components/Comments/CommentsTab'; 
 
 const TemplatePage = () => {
     const { id } = useParams();
@@ -30,7 +31,7 @@ const TemplatePage = () => {
         const fetchData = async () => {
             try {
                 const responseTemplate = await axiosInstance.get(`/templates/public/${id}`);
-                
+
                 if (responseTemplate.data.accessType === 'private') {
                     const allowedUserIds = responseTemplate.data.allowedUsers.map(userItem => userItem.id || userItem);
                     if (!allowedUserIds.includes(user.id) && !roles.includes(Admin) && responseTemplate.data.creatorId !== user.id) {
@@ -38,7 +39,7 @@ const TemplatePage = () => {
                         return;
                     }
                 }
-                
+
                 setTemplate(responseTemplate.data);
                 const responseFilledForms = await axiosInstance.get(`/templates/${id}/filledForms`);
                 setFilledForms(responseFilledForms.data);
@@ -116,6 +117,9 @@ const TemplatePage = () => {
                         </Card>
                     </Tab>
                 )}
+                <Tab eventKey="comments" title="Comments">
+                    <Comments templateId={id} />
+                </Tab>
             </Tabs>
             <h2>Fill Out This Form</h2>
             <FillForm
