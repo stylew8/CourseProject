@@ -1,9 +1,8 @@
 import React, { createContext, useState, useEffect } from 'react';
-import axios from 'axios';
+import { axiosInstance } from '../api/axiosInstance'
 
 export const AuthContext = createContext();
 
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://uniqum.school';
 const LOGIN_ENDPOINT = '/auth/login';
 const REGISTER_ENDPOINT = '/auth/register';
 const ME_ENDPOINT = '/auth/me';
@@ -20,7 +19,7 @@ export const AuthProvider = ({ children }) => {
         const checkAuth = async () => {
             setLoading(true);
             try {
-                const response = await axios.get(`${API_BASE_URL}${ME_ENDPOINT}`, { withCredentials: true });
+                const response = await axiosInstance.get(`${ME_ENDPOINT}`);
                 setUser(response.data.user);
                 setRoles(response.data.roles);
                 setIsAuthenticated(true);
@@ -40,10 +39,9 @@ export const AuthProvider = ({ children }) => {
         setLoading(true);
         setError(null);
         try {
-            const response = await axios.post(
-                `${API_BASE_URL}${LOGIN_ENDPOINT}`,
-                { email, password, rememberMe },
-                { withCredentials: true }
+            const response = await axiosInstance.post(
+                `${LOGIN_ENDPOINT}`,
+                { email, password, rememberMe }
             );
             setUser(response.data.user);
             setRoles(response.data.roles);
@@ -60,10 +58,9 @@ export const AuthProvider = ({ children }) => {
         setLoading(true);
         setError(null);
         try {
-            const response = await axios.post(
-                `${API_BASE_URL}${REGISTER_ENDPOINT}`,
-                { email, firstName, lastName, password, confirmPassword },
-                { withCredentials: true }
+            const response = await axiosInstance.post(
+                `${REGISTER_ENDPOINT}`,
+                { email, firstName, lastName, password, confirmPassword }
             );
             setUser(response.data.user);
             setRoles(response.data.roles);
@@ -79,10 +76,8 @@ export const AuthProvider = ({ children }) => {
 
     const logout = async () => {
         try {
-            await axios.post(
-                `${API_BASE_URL}${LOGOUT_ENDPOINT}`,
-                {},
-                { withCredentials: true }
+            await axiosInstance.post(
+                `${LOGOUT_ENDPOINT}`
             );
         } catch (err) {
             console.error('Ошибка при логауте', err);
