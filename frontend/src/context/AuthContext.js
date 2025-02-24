@@ -3,7 +3,7 @@ import axios from 'axios';
 
 export const AuthContext = createContext();
 
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://uniqum.school';
 const LOGIN_ENDPOINT = '/auth/login';
 const REGISTER_ENDPOINT = '/auth/register';
 const ME_ENDPOINT = '/auth/me';
