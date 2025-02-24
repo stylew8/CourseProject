@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Form, ListGroup, Row, Col, Pagination } from 'react-bootstrap';
+import { Container, Form, ListGroup, Row, Col, Pagination, Badge } from 'react-bootstrap';
 import axiosInstance from '../api/axiosInstance';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import debounce from 'lodash.debounce';
+import MarkdownPreview from '../components/MarkdownPreview';
 
 const SearchPage = () => {
     const [searchParams, setSearchParams] = useSearchParams();
@@ -15,10 +16,10 @@ const SearchPage = () => {
     const [results, setResults] = useState([]);
     const [resultCount, setResultCount] = useState(0);
     const [page, setPage] = useState(initialPage);
-
-    const pageSize = 10; 
+    const pageSize = 10;
     const navigate = useNavigate();
 
+    // Функция поиска шаблонов по запросу, сортировке и с пагинацией
     const handleSearch = async (q, sort, currentPage) => {
         if (!q.trim()) {
             setResults([]);
@@ -29,6 +30,8 @@ const SearchPage = () => {
             const response = await axiosInstance.get(
                 `/search/search?q=${encodeURIComponent(q)}&sort=${sort}&page=${currentPage}&pageSize=${pageSize}`
             );
+            // Предполагается, что backend возвращает объект вида:
+            // { templates: [ { id, title, summary, snippet, ... } ], totalCount: число }
             setResults(response.data.templates);
             setResultCount(response.data.totalCount || response.data.templates.length);
         } catch (error) {
@@ -43,14 +46,14 @@ const SearchPage = () => {
     const onQueryChange = (e) => {
         const q = e.target.value;
         setQuery(q);
-        setSearchParams({ q, sort: sortOrder, page: page });
+        setSearchParams({ q, sort: sortOrder, page });
         debouncedSearch(q, sortOrder, page);
     };
 
     const onSortChange = (e) => {
         const newSort = e.target.value;
         setSortOrder(newSort);
-        setSearchParams({ q: query, sort: newSort, page: page });
+        setSearchParams({ q: query, sort: newSort, page });
         handleSearch(query, newSort, page);
     };
 
@@ -106,13 +109,21 @@ const SearchPage = () => {
                             className="mb-2"
                         >
                             <div className="d-flex justify-content-between align-items-center">
-                                <div>{template.title}</div>
-                                {template.summary && (
-                                    <div className="text-muted" style={{ fontSize: '0.9rem' }}>
-                                        {template.summary}
-                                    </div>
+                                <div className="fw-bold">{template.title}</div>
+                                {template.snippet && (
+                                    <Badge bg="secondary" pill>
+                                        {template.snippet}
+                                    </Badge>
                                 )}
                             </div>
+                            <div className="text-muted">
+                                <MarkdownPreview markdownText={template.description} />
+                            </div>
+                            {template.matchedContext && (
+                                <div className="mt-1">
+                                    <em>Found in: {template.matchedContext}</em>
+                                </div>
+                            )}
                         </ListGroup.Item>
                     ))}
                 </ListGroup>
